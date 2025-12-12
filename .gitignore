@@ -1,0 +1,20 @@
+# Python virtual environment
+.venv/
+.env
+
+# Byte-compiled files
+__pycache__/
+*.pyc
+
+# SQLite database
+database.db
+
+# Flask session files (if any)
+instance/
+
+# VSCode / PyCharm
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
