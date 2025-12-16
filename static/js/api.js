@@ -11,6 +11,6 @@ async function updateBalance(amount) {
     });
 
     let data = await res.json();
-    document.getElementById("balance").innerText = data.balance;
+    document.getElementById("balance").innerText = `Balance: ${data.balance}$`;
     return data.balance;
 }

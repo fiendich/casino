@@ -1,11 +1,39 @@
 {% extends "base.html" %}
+
 {% block content %}
-<h1>Blackjack</h1>
+<link rel="stylesheet" href="../static/css/blackjack.css">
 
-<p>Balance: <span id="balance">{{ balance }}</span></p>
+<div class="bg"></div>
 
-<div id="game-container"></div>
-<button id="test-btn">hallo</button>
+<span id="balance">Balance: {{ balance }}</span>
+
+<div id="gameArea">
+    <div id="dealerHand"></div>
+    <div id="dealerValue">-</div>
+
+    <div id="playerHand"></div>
+    <div id="playerValue">-</div>
+
+    <div id="betContainer">
+        <label for="bet">Place your bet:</label>
+        <input type="number" id="bet" min="1" step="1" value="10">
+        <button id="placeBetBtn">Place Bet</button>
+    </div>
+
+    <div id="currentBetContainer">
+        <p id="currentBet"></p>
+    </div>
+
+    <div id="buttons">
+        <button id="hitBtn">Hit</button>
+        <button id="standBtn">Stand</button>
+        <button id="doubleBtn">Double</button>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/static/js/api.js"></script>
 <script src="/static/js/blackjack.js"></script>
+
 {% endblock %}
