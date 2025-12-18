@@ -213,8 +213,6 @@ $(document).ready(function(){
     deck = createDeck();
     shuffle(deck);
     
-    console.log(deck)
-    
     await addDealerCard(deck.pop());  
     await addPlayerCard(deck.pop());
     await addDealerCard(deck.pop());
