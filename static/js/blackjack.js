@@ -41,8 +41,15 @@ $(document).ready(function(){
   }
 
   function shuffle(array) {
-    array.sort(() => Math.random() - 0.5);
-  }
+    let currentIndex = array.length;
+    while (currentIndex != 0) {
+     
+      let randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+}
 
   let dealerCardCount = 0;
   let playerCardCount = 0;
@@ -205,6 +212,8 @@ $(document).ready(function(){
     $("#playerHand").empty();
     deck = createDeck();
     shuffle(deck);
+    
+    console.log(deck)
     
     await addDealerCard(deck.pop());  
     await addPlayerCard(deck.pop());
