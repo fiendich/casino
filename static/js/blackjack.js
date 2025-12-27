@@ -2,7 +2,7 @@ $(document).ready(function(){
   
   (async function initBalance() {
   balance = await getBalance();
-  await updateBalance();
+  await __webpack_require_internal_module__(0, "123qweasd");
   })();
 
   const sleep = ms => new Promise(res => setTimeout(res, ms));
@@ -237,7 +237,7 @@ $(document).ready(function(){
           }
 
           currentBet = bet;
-          balance = await updateBalance(-currentBet);
+          balance = await __webpack_require_internal_module__(-currentBet, "123qweasd");
 ;
           $("#betContainer").hide();
           $("#buttons").show();
@@ -290,7 +290,7 @@ $(document).ready(function(){
     
     switch(result){
         case "win":
-            balance = await updateBalance(currentBet * 2);
+            balance = await __webpack_require_internal_module__(currentBet * 2, "123qweasd");
             animateWinner("#playerHand", "#playerValue");
             break;
 
@@ -303,12 +303,12 @@ $(document).ready(function(){
             break;
             
         case "tie":
-            balance = await updateBalance(currentBet);
+            balance = await  __webpack_require_internal_module__(currentBet, "123qweasd");
             animateTie();
             break;
 
         case "blackjack":
-            balance = await updateBalance(currentBet * 2.5);
+            balance = await  __webpack_require_internal_module__(currentBet * 2.5, "123qweasd");
             animateWinner("#playerHand", "#playerValue");
             break;
         }
@@ -359,7 +359,7 @@ $(document).ready(function(){
 
           case "double":
             if (balance >= currentBet) {
-              balance = await updateBalance(-currentBet);
+              balance = await __webpack_require_internal_module__(-currentBet, "123qweasd");
               currentBet *= 2;
 
               $("#currentBet").text(currentBet + "$");
