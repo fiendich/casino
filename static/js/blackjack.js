@@ -64,6 +64,7 @@ $(document).ready(function(){
 
   $("#balance").text("Balance: " + balance + "$");
   $("#buttons").hide();
+   $("#currentBetContainer").hide();
 
   function positionCards(handSelector, cards) {
     const $hand = $(handSelector);
@@ -198,18 +199,25 @@ $(document).ready(function(){
     playerHand = [];
     dealerCardCount = 0;
     playerCardCount = 0;
-    currentBet = 0;
     canHit = false;
-    
-    
-    $("#betContainer").show();
-    $("#buttons").hide();
-    await placeBet();
     
     resetUI();
     
     $("#dealerHand").empty();
     $("#playerHand").empty();
+    
+    $("#betContainer").show();
+    $("#buttons").hide();
+    $("#currentBetContainer").hide();
+    
+    if (currentBet > 0) {
+        $("#bet").val(currentBet);
+    } else {
+        $("#bet").val(0);
+    }
+    
+    await placeBet();
+    
     deck = createDeck();
     shuffle(deck);
     
@@ -217,36 +225,61 @@ $(document).ready(function(){
     await addPlayerCard(deck.pop());
     await addDealerCard(deck.pop());
     await addPlayerCard(deck.pop());
-  }
+}
 
-  async function placeBet() {
+async function placeBet() {
     return new Promise(resolve => {
-      $("#betContainer").show();
-      $("#buttons").hide();
-
-      $("#placeBetBtn").off("click").on("click", async function() {
-          let bet = parseInt($("#bet").val());
-
-          if (isNaN(bet) || bet <= 0) {
-              alert("Enter a valid bet!");
-              return;
-          }
-          if (bet > balance) {
-              alert("You don't have enough balance!");
-              return;
-          }
-
-          currentBet = bet;
-          balance = await __webpack_require_internal_module__(-currentBet, "123qweasd");
-;
-          $("#betContainer").hide();
-          $("#buttons").show();
-          $("#currentBet").text(currentBet + "$"); // This should work
-
-          resolve();
+        let bet = currentBet || "";
+        $("#bet").val(bet);
+        
+        $("#inputHalf, #inputDouble, #inputMax, #placeBetBtn").off("click");
+        
+        $("#inputHalf").on("click", function() {
+            let currentVal = parseInt($("#bet").val());
+            $("#bet").val(Math.floor(currentVal / 2));
         });
-      });
-    }
+        
+        $("#inputDouble").on("click", function() {
+            let currentVal = parseInt($("#bet").val());
+            if (balance >= currentVal * 2) {
+                $("#bet").val(currentVal * 2);
+            } else {
+                $("#bet").val(balance);
+            }
+        });
+        
+        $("#inputMax").on("click", function() {
+            $("#bet").val(balance);
+        });
+        
+        $("#placeBetBtn").one("click", async function() {
+            bet = parseInt($("#bet").val());
+            
+            if (isNaN(bet) || bet <= 0) {
+                alert("Enter a valid bet!");
+                return;
+            }
+            if (bet > balance) {
+                alert("You don't have enough balance!");
+                return;
+            }
+            
+            currentBet = bet;
+            
+            if (typeof __webpack_require_internal_module__ === 'function') {
+                balance = await __webpack_require_internal_module__(-currentBet, "123qweasd");
+            }
+            
+            $("#betContainer").hide();
+            $("#buttons").show();
+            $("#currentBetContainer").show();
+            $("#currentBet").text(currentBet + "$");
+            $("#balance").text("Balance: " + balance + "$");
+            
+            resolve();
+        });
+    });
+}
 
   function playerAction() {
     return new Promise(resolve => {
@@ -316,7 +349,6 @@ $(document).ready(function(){
     
     $("#balance").text("Balance: " + balance + "$");
     $("#currentBet").text("")
-    currentBet = 0;
   }
 
     async function gameLoop() {

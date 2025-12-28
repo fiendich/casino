@@ -6,15 +6,21 @@ html, body {
     font-family: Arial, sans-serif;
 }
 
+/* ================= BACKGROUND ================= */
+
 .bg {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: url("../images/blackjack/background.jpg");
     background-size: cover;
     background-position: center;
     z-index: -1;
 }
+
+/* ================= BALANCE & BET ================= */
 
 #balance {
     position: absolute;
@@ -37,24 +43,23 @@ html, body {
 }
 
 #currentBet {
-    position: relative;
-    align-content: center;
     font-size: 23px;
     color: white;
     font-weight: bold;
     text-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
 
+/* ================= GAME AREA ================= */
+
 #gameArea {
     position: absolute;
-    justify-content: center;
-    align-items: center;
     width: 100vw;
     height: 100vh;
     transform-origin: top left;
 }
 
-#dealerHand, #playerHand {
+#dealerHand,
+#playerHand {
     position: relative;
     display: flex;
     justify-content: center;
@@ -62,14 +67,14 @@ html, body {
 }
 
 #dealerHand {
-    left: 0;
     top: 21%;
 }
 
 #playerHand {
-    left: 0;
     top: 70.5%;
 }
+
+/* ================= CARDS ================= */
 
 .card-container {
     display: flex;
@@ -85,105 +90,149 @@ html, body {
     height: 124px;
     background-size: contain;
     background-repeat: no-repeat;
-    border: 2px solid #000;
+    border: 2px solid #333;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-#dealerValue {
-    border-radius: 6px;
-    outline: 7px solid #595E92;
-    scale: 0.5;
-    font-size: 30px;
-    color: white;
-    background-color: #454E8A;
+/* ================= HAND VALUES ================= */
+
+#dealerValue,
+#playerValue {
+    position: absolute;
     width: 65px;
     height: 50px;
-    position: absolute;
+    border-radius: 6px;
+    outline: 7px solid #595E92;
+    background-color: #454E8A;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    scale: 0.5;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+#dealerValue {
     left: 49%;
     top: 31%;
     transform: translate(-50%, -50%);
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 #playerValue {
-    border-radius: 6px;
-    outline: 7px solid #595E92;
-    scale: 0.5;
-    font-size: 30px;
-    color: white;
-    background-color: #454E8A;
-    width: 65px;
-    height: 50px;
-    position: absolute;
     left: 49%;
     top: 58%;
     transform: translate(-50%, -50%);
-    text-align: center;
+}
+
+/* ================= BET INPUT ================= */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#dollar {
+    position: absolute; 
+    color: #636C8A;
+    top: 56.5%;
+    left: 6%;
+    transform: translate(-50%, -50%);
+    opacity: 0.7;
+}
+
+#inputContainer {
+    position: relative;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
+    height: 50%;
 }
 
 #betContainer {
     position: absolute;
     left: 50%;
-    top: 83%;
+    bottom: 8%;
     transform: translateX(-50%);
+
+    height: 7.5%;
+    width: 12.5%;
+
+    gap: 10px;
+    display: flex;
     text-align: center;
-    background: rgba(0,118,219,0.3);
-    backdrop-filter: blur(100px);
-    padding: 25px 50px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    color: #FFFF;
-    font-size: 20px;
-    font-weight: bold;
-    border: 3px solid #0459a3;
-    white-space: nowrap;
+    flex-direction: column;
+    align-items: center;
 }
 
-#betContainer input {
-    width: 90px;
-    padding: 8px 12px;
+#inputContainer input {
+    width: 100%;
+    height: 100%;
     font-size: 18px;
+    background: #202849;
+    color: white;
+
     border-radius: 8px;
-    border: 2px solid #0076DB;
-    background: white;
-    color: #1F2245;
-    margin-left: 10px;
-    text-align: center;
+    border: 1px solid #222A49;
+    padding-left: 10%;
+
     font-weight: bold;
 }
 
 #betContainer input:focus {
     outline: none;
-    border-color: #0056A3;
     box-shadow: 0 0 8px rgba(0,118,219,0.5);
 }
 
-#betContainer button {
-    padding: 10px 20px;
-    margin-left: 10px;
+#placeBetBtn {
+    width: 100%;
+    height: 50%;
+
     font-size: 18px;
     border-radius: 10px;
     border: none;
-    background: linear-gradient(135deg, #0076DB, #0056A3);
+    background: #0070DA;
     color: white;
     cursor: pointer;
-    transition: 0.25s;
     font-weight: bold;
+    transition: 0.25s;
 }
 
-#betContainer button:hover {
-    background: linear-gradient(135deg, #0088FF, #0066CC);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+#inputContainer button {
+    position: absolute;
+    color: #636C8A;
+    top: 50%;
+    transform: translateY(-40%);
+    background-color: #18203B;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    height: 70%;
+    width: 14%;
+    cursor: pointer;
 }
+
+#inputHalf {
+    left: 47%;
+}
+
+#inputDouble {
+    left: 63%;
+}
+
+#inputMax {
+    left: 79%;
+}
+
+#placeBetBtn:hover {
+    box-shadow: 1px 1px 15px rgba(255, 255, 255, 0.3);
+}
+
+/* ================= ACTION BUTTONS ================= */
 
 #buttons {
     position: absolute;
@@ -192,84 +241,102 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    gap: 18px;
 }
 
 #buttons button {
-    width: 120px;
-    height: 50px;
-    font-size: 16px;
+    width: 130px;
+    height: 55px;
+    font-size: 17px;
     font-weight: bold;
-    border: none;
-    border-radius: 10px;
+    letter-spacing: 0.5px;
+    border-radius: 14px;
     color: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    transition: 0.25s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    opacity: 0.95;
+
+    background: linear-gradient(145deg, #2b2f66, #1a1d40);
+    box-shadow:
+        0 6px 15px rgba(0,0,0,0.6),
+        inset 0 0 0 rgba(255,255,255,0);
+
+    transition: all 0.25s ease;
 }
+
+/* ===== HIT ===== */
 
 #hitBtn {
-    background: linear-gradient(135deg, #28A745, #1E7E34);
-    border: 2px solid #34CE57;
+    border: 2px solid #269640;
+    box-shadow:
+        0 0 10px rgba(52,206,87,0.35),
+        0 6px 15px rgba(0,0,0,0.6);
 }
+
+#hitBtn:hover {
+    border-color: #34CE57;
+}
+
+/* ===== STAND ===== */
 
 #standBtn {
-    background: linear-gradient(135deg, #DC3545, #C82333);
-    border: 2px solid #E74C3C;
+    border: 2px solid #ba3f31;
+    box-shadow:
+        0 0 10px rgba(231,76,60,0.35),
+        0 6px 15px rgba(0,0,0,0.6);
 }
+
+#standBtn:hover {
+    border-color: #E74C3C;
+}
+
+/* ===== DOUBLE ===== */
 
 #doubleBtn {
-    background: linear-gradient(135deg, #0076DB, #0056A3);
-    border: 2px solid #0088FF;
+    border: 2px solid #0089b7;
+    box-shadow:
+        0 0 12px rgba(0,191,255,0.45),
+        0 6px 15px rgba(0,0,0,0.6);
 }
 
-#buttons button:hover {
-    cursor: pointer;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-    filter: brightness(1.1);
+#doubleBtn:hover {
+    border-color: #00BFFF;
 }
+
+/* ===== BUTTON INTERACTION ===== */
 
 #buttons button:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
 }
 
+/* ================= WIN STATES ================= */
+
 .winner-border {
-  border: 3px solid #34A873 !important;
+    border: 3px solid #34A873 !important;
 }
 
 .winner-value {
-  background-color: #34A873 !important;
-  outline: #34A873 !important;
+    background-color: #34A873 !important;
+    outline: #34A873 !important;
 }
 
 .tie {
-  border: 3px solid #D2A916 !important;
+    border: 3px solid #D2A916 !important;
 }
 
 .tie-value {
-  background-color: #FCBF01 !important;
-  outline: #FCBF01 !important;
+    background-color: #FCBF01 !important;
+    outline: #FCBF01 !important;
 }
 
 .winner-animation {
-  animation: pulse 0.5s ease-in-out;
+    animation: pulse 0.5s ease-in-out;
 }
 
 @keyframes pulse {
-  0% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.1); }
-  100% { transform: translate(-50%, -50%) scale(1); }
-}
-
-#dealerValue, #playerValue {
-  transition: all 0.3s ease;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.card {
-  border: 2px solid #333;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); }
 }
