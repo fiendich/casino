@@ -241,15 +241,15 @@ async function placeBet() {
         
         $("#inputDouble").on("click", function() {
             let currentVal = parseInt($("#bet").val());
-            if (balance >= currentVal * 2) {
+            if (balance.balance >= currentVal * 2) {
                 $("#bet").val(currentVal * 2);
             } else {
-                $("#bet").val(balance);
+                $("#bet").val(balance.balance);
             }
         });
         
         $("#inputMax").on("click", function() {
-            $("#bet").val(balance);
+            $("#bet").val(balance.balance);
         });
         
         $("#placeBetBtn").one("click", async function() {

@@ -160,7 +160,7 @@ input::-webkit-inner-spin-button {
     transform: translateX(-50%);
 
     height: 7.5%;
-    width: 12.5%;
+    width: 15%;
 
     gap: 10px;
     display: flex;
@@ -212,7 +212,7 @@ input::-webkit-inner-spin-button {
     border-radius: 4px;
     text-align: center;
     height: 70%;
-    width: 14%;
+    width: 15%;
     cursor: pointer;
 }
 
@@ -221,11 +221,11 @@ input::-webkit-inner-spin-button {
 }
 
 #inputDouble {
-    left: 63%;
+    left: 65%;
 }
 
 #inputMax {
-    left: 79%;
+    left: 83%;
 }
 
 #placeBetBtn:hover {
