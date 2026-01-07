@@ -235,24 +235,21 @@ async function placeBet() {
         $("#inputHalf, #inputDouble, #inputMax, #placeBetBtn").off("click");
         
         $("#inputHalf").on("click", function() {
-            let currentVal = parseInt($("#bet").val());
-            $("#bet").val(Math.floor(currentVal / 2));
+          let currentVal = parseInt($("#bet").val()) || 0;
+          $("#bet").val(Math.floor(currentVal / 2));
         });
-        
+
         $("#inputDouble").on("click", function() {
-            let currentVal = parseInt($("#bet").val());
-            if (balance.balance >= currentVal * 2) {
-                $("#bet").val(currentVal * 2);
-            } else {
-                $("#bet").val(balance.balance);
-            }
+          let currentVal = parseInt($("#bet").val()) || 0;
+          let newVal = Math.min(currentVal * 2, balance);
+          $("#bet").val(newVal);
         });
-        
+
         $("#inputMax").on("click", function() {
-            $("#bet").val(balance.balance);
+          $("#bet").val(balance);
         });
         
-        $("#placeBetBtn").one("click", async function() {
+        $("#placeBetBtn").off("click").on("click", async function () {
             bet = parseInt($("#bet").val());
             
             if (isNaN(bet) || bet <= 0) {
