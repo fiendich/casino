@@ -253,11 +253,11 @@ async function placeBet() {
             bet = parseInt($("#bet").val());
             
             if (isNaN(bet) || bet <= 0) {
-                alert("Enter a valid bet!");
+                showToast("Enter a valid bet!");
                 return;
             }
             if (bet > balance) {
-                alert("You don't have enough balance!");
+                showToast("You don't have enough balance!");
                 return;
             }
             
@@ -288,7 +288,7 @@ async function placeBet() {
         if (balance >= currentBet) {
           resolve("double");
         } else {
-          alert("Not enough balance to double!");
+          showToast("Not enough balance to double!");
           playerAction().then(resolve);
         }
       });
