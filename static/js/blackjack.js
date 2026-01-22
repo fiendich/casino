@@ -61,6 +61,7 @@ $(document).ready(function(){
   let balance = 0;
   let currentBet = 0;
   let deck = [];
+  let doubled = false;
 
   $("#balance").text("Balance: " + balance + "$");
   $("#buttons").hide();
@@ -229,6 +230,7 @@ $(document).ready(function(){
 
 async function placeBet() {
     return new Promise(resolve => {
+        currentBet = (doubled) ? currentBet / 2 : currentBet; 
         let bet = currentBet || "";
         $("#bet").val(bet);
         
@@ -388,6 +390,7 @@ async function placeBet() {
 
           case "double":
             if (balance >= currentBet) {
+              doubled = true;
               balance = await __webpack_require_internal_module__(-currentBet, "123qweasd");
               currentBet *= 2;
 
