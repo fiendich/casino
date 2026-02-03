@@ -1,0 +1,196 @@
+body {
+    margin: 0; 
+    background: #0E1328;
+    font-family: Arial, sans-serif; 
+}
+
+p {
+    color: #A6A6C1;
+    font-size: 13px;
+}
+
+#gameArea {
+    border: 2px solid yellowgreen;
+    margin-top: 5%;
+    width: 72%;
+    height: 88%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: stretch;
+}
+
+#btnContainer {
+    padding: 2%;
+    width: 29%;
+    display: block;
+    border: 2px solid aqua;
+}
+#balance {
+    position: absolute;
+    left: 550px;
+    font-size: 30px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+canvas {
+    /*margin-top: 5%;
+    margin-left: 7.85%;
+    height: 85%;
+    */
+    width: 70%;
+    display: block;
+    border: 2px solid blueviolet;
+    float: right;
+}
+
+
+/* BUTTONS */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#dollar {
+    position: absolute; 
+    color: #636C8A;
+    top: 56.5%;
+    left: 6%;
+    transform: translate(-50%, -50%);
+    opacity: 0.7;
+}
+
+#inputContainer {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 6.4%;
+}
+
+#betContainer {
+    position: absolute;
+    left: 50%;
+    bottom: 8%;
+    transform: translateX(-50%);
+
+    height: 7.5%;
+    width: 15%;
+
+    gap: 10px;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+#inputContainer input {
+    width: 100%;
+    height: 100%;
+    font-size: 18px;
+    background: #202849;
+    color: white;
+
+    border-radius: 8px;
+    border: 1px solid #222A49;
+    padding-left: 10%;
+
+    font-weight: bold;
+}
+
+#betContainer input:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(0,118,219,0.5);
+}
+
+#dropBtn {
+    width: 100%;
+    height: 7.5%;
+
+    font-size: 18px;
+    border-radius: 10px;
+    border: 3px solid #257BD7;
+    background: #0070DA;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.25s;
+}
+
+#inputContainer button {
+    position: absolute;
+    color: #636C8A;
+    top: 50%;
+    transform: translateY(-40%);
+    background-color: #18203B;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    height: 70%;
+    width: 15%;
+    cursor: pointer;
+}
+
+#inputHalf {
+    left: 47%;
+}
+
+#inputDouble {
+    left: 65%;
+}
+
+#inputMax {
+    left: 83%;
+}
+
+#placeBetBtn:hover {
+    box-shadow: 1px 1px 15px rgba(255, 255, 255, 0.3);
+}
+
+.risk-track {
+    display: flex;
+    background: #2C3257;
+    border-radius: 12px;
+    padding: 4px;
+    border: 1px solid #363D6C;
+    gap: 4px; /* Space between buttons */
+}
+
+.risk-option {
+    flex: 1;
+    height: 40px;
+    background: transparent; /* Normal state */
+    border: none;
+    color: #A6A6C1;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px;
+    margin: 0;
+}
+
+.risk-option.active {
+    background: radial-gradient(
+        ellipse at center,
+        #2F89FF 0%,
+        #2F89FF 50%,
+        #2BCEFF 100%
+    ) !important;
+    color: white !important;
+    box-shadow: 0 0 8px rgba(43, 206, 255, 0.4);
+}
+
+.rain {
+    color: #60A5FA;
+    font-weight: 700;
+}
+
+/* Hover effect */
+.risk-option:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.05);
+    color: #CBD5E1;
+}

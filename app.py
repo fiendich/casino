@@ -84,6 +84,14 @@ def roulette():
     return render_template("roulette.html", balance=user.balance)
 
 
+@app.route("/plinko")
+def plinko():
+    if "user_id" not in session:
+        return redirect("/login")
+
+    user = User.query.get(session["user_id"])
+    return render_template("plinko.html", balance=user.balance)
+
 # ------------------------
 # API ENDPOINTS
 # ------------------------
