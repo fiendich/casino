@@ -1,0 +1,170 @@
+/* ================= WRAPPER ================= */
+
+.index-wrapper {
+    width: 100%;
+    height: 100%;
+    background-color: #07162A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+/* ================= HEADER ================= */
+
+.header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.header h1 {
+    font-size: 38px;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 0 0 12px 0;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.balance {
+    font-size: 20px;
+    color: #7a8ab5;
+    margin: 0;
+    font-weight: 600;
+}
+
+.balance span {
+    color: #ffffff;
+}
+
+/* ================= GAME GRID ================= */
+
+.game-grid {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* ================= GAME CARD ================= */
+
+.game-card {
+    text-decoration: none;
+    color: inherit;
+    width: 240px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(160deg, #0f2444, #0B1C3D);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    cursor: pointer;
+}
+
+.game-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+}
+
+/* ================= CARD IMAGE PLACEHOLDER ================= */
+
+.card-img {
+    width: 100%;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Per-card gradient backgrounds */
+#card-blackjack .card-img {
+    background: linear-gradient(135deg, #1a2a4a, #0d1f3c);
+}
+
+#card-roulette .card-img {
+    background: linear-gradient(135deg, #2a1a1a, #3c0d0d);
+}
+
+#card-plinko .card-img {
+    background: linear-gradient(135deg, #1a2a3a, #0d2030);
+}
+
+/* Subtle radial glow behind the icon */
+.card-img::before {
+    content: '';
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.35;
+    transition: opacity 0.3s ease;
+}
+
+#card-blackjack .card-img::before { background: #4a90d9; }
+#card-roulette .card-img::before { background: #d94a4a; }
+#card-plinko .card-img::before { background: #4ad9a0; }
+
+.game-card:hover .card-img::before {
+    opacity: 0.55;
+}
+
+/* ================= CARD ICON ================= */
+
+.card-icon {
+    font-size: 64px;
+    color: rgba(255, 255, 255, 0.85);
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.game-card:hover .card-icon {
+    transform: scale(1.1);
+}
+
+/* ================= CARD BODY ================= */
+
+.card-body {
+    padding: 20px 22px;
+    background: #0B1C3D;
+}
+
+.card-body h2 {
+    margin: 0 0 6px 0;
+    font-size: 21px;
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.card-body p {
+    margin: 0;
+    font-size: 13px;
+    color: #7a8ab5;
+}
+
+/* ================= HOVER GLOW BORDERS ================= */
+
+#card-blackjack:hover {
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.55),
+        0 0 18px rgba(74, 144, 217, 0.25);
+}
+
+#card-roulette:hover {
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.55),
+        0 0 18px rgba(217, 74, 74, 0.25);
+}
+
+#card-plinko:hover {
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.55),
+        0 0 18px rgba(74, 217, 160, 0.25);
+}

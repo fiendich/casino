@@ -231,7 +231,7 @@ $(document).ready(function(){
 async function placeBet() {
     return new Promise(resolve => {
         currentBet = (doubled) ? currentBet / 2 : currentBet; 
-        let bet = currentBet || "";
+        let bet = currentBet || 100;
         $("#bet").val(bet);
         
         $("#inputHalf, #inputDouble, #inputMax, #placeBetBtn").off("click");

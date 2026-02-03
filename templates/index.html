@@ -1,10 +1,43 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Willkommen im Casino!</h1>
+<link rel="stylesheet" href="../static/css/index.css">
 
-<p>Balance: {{ balance }}</p>
+<div class="index-wrapper">
+    <div class="header">
+        <h1>Welcome to the Casino</h1>
+        <p class="balance">Balance: ${{ balance }}</p>
+    </div>
 
-<a href="/blackjack">Blackjack</a><br>
-<a href="/roulette">Roulette</a><br>
-<a href="/plinko">Plinko</a>
+    <div class="game-grid">
+        <a href="/blackjack" class="game-card" id="card-blackjack">
+            <div class="card-img">
+                <div class="card-icon">♠</div>
+            </div>
+            <div class="card-body">
+                <h2>Blackjack</h2>
+                <p>Beat the dealer to 21</p>
+            </div>
+        </a>
+
+        <a href="/roulette" class="game-card" id="card-roulette">
+            <div class="card-img">
+                <div class="card-icon">◉</div>
+            </div>
+            <div class="card-body">
+                <h2>Roulette</h2>
+                <p>Spin the wheel of fortune</p>
+            </div>
+        </a>
+
+        <a href="/plinko" class="game-card" id="card-plinko">
+            <div class="card-img">
+                <div class="card-icon">◎</div>
+            </div>
+            <div class="card-body">
+                <h2>Plinko</h2>
+                <p>Drop and win big</p>
+            </div>
+        </a>
+    </div>
+</div>
 {% endblock %}

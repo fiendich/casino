@@ -13,7 +13,7 @@ html, body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: calc(100%);
     background-image: url("../images/blackjack/background.jpg");
     background-size: cover;
     background-position: center;
@@ -53,8 +53,9 @@ html, body {
 
 #gameArea {
     position: absolute;
+    top: 84px;
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 84px);
     transform-origin: top left;
 }
 
@@ -67,11 +68,11 @@ html, body {
 }
 
 #dealerHand {
-    top: 21%;
+    top: 1%;
 }
 
 #playerHand {
-    top: 70.5%;
+    top: 53.5%;
 }
 
 /* ================= CARDS ================= */
@@ -119,13 +120,13 @@ html, body {
 
 #dealerValue {
     left: 49%;
-    top: 31%;
+    top: 11%;
     transform: translate(-50%, -50%);
 }
 
 #playerValue {
     left: 49%;
-    top: 58%;
+    top: 40%;
     transform: translate(-50%, -50%);
 }
 
@@ -156,7 +157,7 @@ input::-webkit-inner-spin-button {
 #betContainer {
     position: absolute;
     left: 50%;
-    bottom: 8%;
+    bottom: 20%;
     transform: translateX(-50%);
 
     height: 7.5%;
@@ -237,7 +238,7 @@ input::-webkit-inner-spin-button {
 #buttons {
     position: absolute;
     width: 100vw;
-    bottom: 8.5%;
+    bottom: 23%;
     display: flex;
     justify-content: center;
     align-items: center;

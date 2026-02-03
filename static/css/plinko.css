@@ -10,8 +10,7 @@ p {
 }
 
 #gameArea {
-    border: 2px solid yellowgreen;
-    margin-top: 5%;
+    margin-top: 0; /* nav is handled by base.html .content */
     width: 72%;
     height: 88%;
     margin-left: auto;
@@ -24,27 +23,23 @@ p {
     padding: 2%;
     width: 29%;
     display: block;
-    border: 2px solid aqua;
 }
+
 #balance {
     position: absolute;
-    left: 550px;
+    left: 240px;
+    top: 600px; /* was relying on page top, now offset for nav */
     font-size: 30px;
     color: white;
     font-weight: bold;
     text-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
+
 canvas {
-    /*margin-top: 5%;
-    margin-left: 7.85%;
-    height: 85%;
-    */
     width: 70%;
     display: block;
-    border: 2px solid blueviolet;
     float: right;
 }
-
 
 /* BUTTONS */
 input::-webkit-outer-spin-button,
@@ -154,13 +149,13 @@ input::-webkit-inner-spin-button {
     border-radius: 12px;
     padding: 4px;
     border: 1px solid #363D6C;
-    gap: 4px; /* Space between buttons */
+    gap: 4px;
 }
 
 .risk-option {
     flex: 1;
     height: 40px;
-    background: transparent; /* Normal state */
+    background: transparent;
     border: none;
     color: #A6A6C1;
     font-size: 14px;

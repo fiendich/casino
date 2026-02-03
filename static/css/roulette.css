@@ -1,21 +1,31 @@
 /* Hintergrund */
 .bg {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 84px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 84px);
     background-color: #07162A;
     background-size: cover;
     z-index: -1;
     background-position: center;
 }
 
+/* Game Area - contains everything, clips overflow */
+#gameArea {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
 /* Left Panel */
 #left-panel {
     position: fixed;
-    top: 0;
+    top: 84px;
     left: 0;
-    width: 25vw;          /* 1/4 der Bildschirmbreite */
-    height: 100vh;
+    width: 25vw;
+    height: calc(100vh - 84px);
     background-color: #0B1C3D;
     padding: 20px;
     box-sizing: border-box;
@@ -57,7 +67,7 @@ button {
 /* Spin Container unter Canvas */
 #spinContainer {
     position: absolute;
-    top: calc(50% + 260px);  /* unter dem Canvas */
+    top: calc(50% + 260px);
     left: 50%;
     transform: translateX(-50%);
     z-index: 3;
@@ -90,18 +100,17 @@ canvas {
     display: flex;
     gap: 6px;
     margin-bottom: 10px;
-    position: absolute;       /* über dem Canvas */
-    top: 20px;                /* Abstand vom oberen Rand */
+    position: absolute;
+    top: 100px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 5;               /* über Canvas */
+    z-index: 5;
 }
 
 /* einzelne History-Farben */
 #historyBar .history-color {
     width: 24px;
     height: 24px;
-    border-radius: 50%;      /* rund */
-    border: 1px solid #333;  /* optional, für Kontrast */
+    border-radius: 50%;
+    border: 1px solid #333;
 }
-
