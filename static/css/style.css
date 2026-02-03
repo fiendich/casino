@@ -1,3 +1,5 @@
+
+/**/
 body {
     background: #222;
     color: white;
@@ -6,92 +8,80 @@ body {
     padding: 0;
 }
 
-/* Hab was gemach */
+/*Die Navigations leiste ganz oben*/
 nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 50px;
-    z-index: 1000;
+    display: flex;
+    justify-content: space-between; /* Verteilt Logo links/mitte und Buttons rechts */
+    align-items: center;
+    padding: 10px 24px;
+    background-color: #1A1C3D; /* Dunkler Rainbet-Vibe */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    height: 64px;
+    font-family: 'Inter', sans-serif;
+    
 }
-
-nav a {
-    color: #0f0;
-    margin-right: 10px;
-}
-
 .content {
     width: 100vw;
     height: 100vh;
     margin: 0;
     padding: 0;
+   
 }
+/*logout button */
+#logoutButton{
+  
+    
+    position: absolute;
+    top: 20px;
+    right: 20px;
 
-/* ================= TOAST ALERT ================= */
-
-#toast-container {
-    position: fixed;
-    top: 6%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    pointer-events: none;
-}
-
-.toast {
-    min-width: 280px;
-    padding: 14px 22px;
-    border-radius: 14px;
-    font-size: 18px;
-    font-weight: bold;
+    padding: 10px 25px;
+    font-size: 16px;
     color: white;
-    text-align: center;
 
-    background: linear-gradient(145deg, #2b2f66, #1a1d40);
-    box-shadow:
-        0 10px 30px rgba(0,0,0,0.7),
-        inset 0 0 0 rgba(255,255,255,0);
+    border: 1px solid #0b4fa3;
+    border-radius: 8px;
+    background: linear-gradient(to bottom, #1e6fd9, #0b4fa3);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
 
-    opacity: 0;
-    transform: translateY(-15px);
-    animation: toastIn 0.35s ease forwards;
+    cursor: pointer;
+    text-decoration: none;
+    z-index: 3;
+
 }
+/*login button*/
+#loginButton{
+    position: absolute;
+    top: 20px;
+    right: 20px;
 
-/* TYPES */
-.toast.success {
-    border: 2px solid #34CE57;
-    box-shadow: 0 0 15px rgba(52,206,87,0.4);
+    padding: 10px 25px;
+    font-size: 16px;
+    color: white;
+
+    border: 1px solid #2F3158;
+    border-radius: 8px;
+    background-color: #242649;
+    cursor: pointer;
+    text-decoration: none;   
+    z-index: 3;
 }
-
-.toast.error {
-    border: 2px solid #E74C3C;
-    box-shadow: 0 0 15px rgba(231,76,60,0.4);
+/*register button*/
+#registerButton{
+    color: black;
+    margin-right: 10px;
 }
-
-.toast.info {
-    border: 2px solid #00BFFF;
-    box-shadow: 0 0 15px rgba(0,191,255,0.4);
+/*home button*/
+#homeButton{
+    position:absolute;
+    top: 8px;
+    left: 40px;
+    z-index: 1000
 }
-
-.toast.warning {
-    border: 2px solid #FCBF01;
-    box-shadow: 0 0 15px rgba(252,191,1,0.4);
-}
-
-@keyframes toastIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes toastOut {
-    to {
-        opacity: 0;
-        transform: translateY(-15px);
-    }
+/* home button bild (SigmaSpin)*/
+#homeButton img{
+    width: 90px;
+    height: 67px;
+    cursor: pointer;
+    top:auto;
 }
