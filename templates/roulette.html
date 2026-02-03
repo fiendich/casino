@@ -2,10 +2,41 @@
 {% block content %}
 <h1>Roulette</h1>
 
-<p>Balance: <span id="balance">{{ balance }}</span></p>
+<div id="gameArea">
 
-<div id="roulette-container"></div>
+    <div class="bg"></div>
 
+    <!-- Left Panel für Bets -->
+    <div id="left-panel">
+        <div id="balance">Balance: </div>
+
+    <div id="bet-controls">
+    <input type="number" id="betInput" value="100" min="1">
+    </div>
+
+<p>Set color (click to bet):</p>
+<button class="bet-btn" data-bet="red">Rot x2</button>
+<button class="bet-btn" data-bet="blue">Blau x2</button>
+<button class="bet-btn" data-bet="green">Grün x14</button>
+    </div>
+    
+    
+
+    <!-- Canvas Wheel + History Bar-->
+    <div id="historyBar" style="display:flex; gap:4px; margin-bottom:10px;"></div> 
+    <canvas id="myWheel" width="700" height="500">
+        Sorry, your browser does not support canvas.
+    </canvas>
+
+</div>
+
+<!-- Spin Button unter Canvas -->
+
+
+<link rel="stylesheet" href="../static/css/roulette.css">
 <script src="/static/js/api.js"></script>
-<script src="/static/js/roulette.js"></script>
+<script src="/static/js/utils.js"></script>
+<script src="/static/js/roulette.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 {% endblock %}
