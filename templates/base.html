@@ -6,9 +6,9 @@
 </head>
 <body>
     <nav>
-        <a href="/">Home</a>
+        <a href="/"id="homeButton"><img src="\static\images\logo\SigmaSpin.png"></a>
         {% if session.get("user_id") %}
-        <a href="/logout">Logout</a>
+        <a href="/logout" id="logoutButton">Logout</a>
         {% endif %}
     </nav>  
 
