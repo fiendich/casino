@@ -26,7 +26,7 @@ cd <REPO_FOLDER>
 
 2) Create virtual environment
 
-python -m venv venv
+python -m venv .venv
 
 Activate it (CMD or PowerShell):
 
