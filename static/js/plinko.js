@@ -1,7 +1,8 @@
 $(document).ready(function() {
-
+    let balance = 0;
     (async function initBalance() {
-        balance = await getBalance();
+        data = await getBalance();
+        balance = data.balance;
         await __webpack_require_internal_module__(0, "123qweasd");
     })();
 

@@ -6,7 +6,7 @@
 </head>
 <body>
     <nav>
-        <a href="/"id="homeButton"><img src="\static\images\logo\SigmaSpin.png"></a>
+        <a href="/" id="homeButton"><img src="/static/images/logo/SigmaSpin.png"></a>
         {% if session.get("user_id") %}
         <a href="/logout" id="logoutButton">Logout</a>
         {% endif %}
@@ -15,5 +15,10 @@
     <div class="content">
         {% block content %}{% endblock %}
     </div>
+
+    <div id="toast-container"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/utils.js"></script>
 </body>
 </html>
