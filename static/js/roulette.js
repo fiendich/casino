@@ -1,14 +1,12 @@
 $(document).ready(function() {
-
+    let balance = 0;
     // ----------------- INITIALISIERUNG -----------------
     
     (async function initBalance() {
-        balance = await getBalance();        
-        await __webpack_require_internal_module__(0, "123qweasd");        
-        console.log(balance, typeof(balance))
+        const data = await getBalance();
+        balance = data.balance;   // 👈 NUR ZAHL
         updateBalanceDisplay();
     })();
-
     const $canvas = $("#myWheel");
     const ctx = $canvas[0].getContext("2d");
 
@@ -157,7 +155,6 @@ $(document).ready(function() {
             alert("Wait for spin to finish!");
             return;
         }
-
         const colorName = $(this).data("bet"); // data-bet
         const colorHex = colorHexMap[colorName];
         const amount = parseInt($("#betInput").val());
@@ -172,14 +169,15 @@ $(document).ready(function() {
             return;
         }
 
-        balance = __webpack_require_internal_module__(-amount,"123qweasd");
+        balance -= amount; 
+        __webpack_require_internal_module__(-amount,"123qweasd");
         bets.push({ color: colorHex, amount });
         updateBalanceDisplay();
     });
 
     // ----------------- HELFER-FUNKTIONEN -----------------
     function updateBalanceDisplay() {
-        $("#balance").text(`Balance: ${balance.balance}$`);
+        $("#balance").text(`Balance: ${balance}$`);
     }
 
     function startSpin() {
