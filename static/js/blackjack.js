@@ -65,7 +65,13 @@ $(document).ready(function(){
 
   $("#balance").text("Balance: " + balance + "$");
   $("#buttons").hide();
-   $("#currentBetContainer").hide();
+  $("#currentBetContainer").hide();
+
+  // Fade in game area after initial setup
+  setTimeout(() => {
+    $("#gameArea").css("opacity", "1");
+    $("#balance").css("opacity", "1");
+  }, 50);
 
   function positionCards(handSelector, cards) {
     const $hand = $(handSelector);
