@@ -1,7 +1,8 @@
 $(document).ready(function(){
-  
+  let balance = 0;
   (async function initBalance() {
-  balance = await getBalance();
+  data = await getBalance();
+  balance = data.balance;
   await __webpack_require_internal_module__(0, "123qweasd");
   })();
 
@@ -58,7 +59,6 @@ $(document).ready(function(){
   let playerHand = [];
 
   let canHit = false;
-  let balance = 0;
   let currentBet = 0;
   let deck = [];
   let doubled = false;
