@@ -10,7 +10,7 @@ p {
 }
 
 #gameArea {
-    margin-top: 0; /* nav is handled by base.html .content */
+    margin-top: 40px; /* nav is handled by base.html .content */
     width: 72%;
     height: 88%;
     margin-left: auto;
@@ -28,7 +28,7 @@ p {
 #balance {
     position: absolute;
     left: 240px;
-    top: 600px; /* was relying on page top, now offset for nav */
+    top: 640px; /* wa   s relying on page top, now offset for nav */
     font-size: 30px;
     color: white;
     font-weight: bold;
