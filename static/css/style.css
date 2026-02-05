@@ -1,5 +1,6 @@
 /**/
 html, body {
+    background: transparent;
     color: white;
     font-family: Arial;
     margin: 0;
@@ -21,6 +22,18 @@ nav {
     position: relative;
     z-index: 1000;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#navUsername {
+    color: #7a8ab5;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .content {
@@ -47,23 +60,29 @@ nav {
     text-decoration: none;
 }
 
-/*login button*/
-#loginButton {
+/*login/register nav buttons*/
+#loginNavButton,
+#registerNavButton {
     padding: 10px 25px;
     font-size: 16px;
     color: white;
-
     border: 1px solid #2F3158;
     border-radius: 8px;
     background-color: #242649;
     cursor: pointer;
     text-decoration: none;
+    transition: background-color 0.2s ease;
 }
 
-/*register button*/
-#registerButton {
-    color: black;
-    margin-right: 10px;
+#loginNavButton:hover,
+#registerNavButton:hover {
+    background-color: #2d3259;
+}
+
+#registerNavButton {
+    background: linear-gradient(to bottom, #1e6fd9, #0b4fa3);
+    border: 1px solid #0b4fa3;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
 }
 
 /*home button*/
@@ -111,7 +130,6 @@ nav {
     animation: toastIn 0.35s ease forwards;
 }
 
-/* TYPES */
 .toast.success {
     border: 2px solid #34CE57;
     box-shadow: 0 0 15px rgba(52,206,87,0.4);
@@ -144,4 +162,127 @@ nav {
         opacity: 0;
         transform: translateY(-15px);
     }
+}
+
+/* ================= AUTH MODAL ================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: linear-gradient(160deg, #0f2444, #0B1C3D);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    width: 400px;
+    max-width: 90%;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 32px;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+.modal-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab-button {
+    flex: 1;
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s ease, border-bottom 0.2s ease;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+}
+
+.tab-button.active {
+    color: #ffffff;
+    border-bottom-color: #1e6fd9;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-content h2 {
+    margin: 0 0 20px 0;
+    color: #ffffff;
+    font-size: 24px;
+}
+
+.tab-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tab-content input {
+    padding: 14px 16px;
+    background: #202849;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    transition: border-color 0.2s ease;
+}
+
+.tab-content input:focus {
+    outline: none;
+    border-color: #1e6fd9;
+}
+
+.tab-content input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.tab-content button[type="submit"] {
+    padding: 14px;
+    background: linear-gradient(to bottom, #1e6fd9, #0b4fa3);
+    border: 1px solid #0b4fa3;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tab-content button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 111, 217, 0.4);
 }

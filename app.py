@@ -15,6 +15,17 @@ with app.app_context():
     db.create_all()
 
 
+# Helper function to get username for templates
+def get_template_context():
+    """Returns common template context with username if logged in"""
+    context = {}
+    if "user_id" in session:
+        user = User.query.get(session["user_id"])
+        if user:
+            context["username"] = user.username
+    return context
+
+
 # ------------------------
 # ROUTES
 # ------------------------
@@ -22,10 +33,11 @@ with app.app_context():
 @app.route("/")
 def index():
     if "user_id" not in session:
-        return redirect("/login")
+        # Not logged in: render index with no balance, modal will open via JS
+        return render_template("index.html", balance=0, **get_template_context())
 
     user = User.query.get(session["user_id"])
-    return render_template("index.html", balance=user.balance)
+    return render_template("index.html", balance=user.balance, **get_template_context())
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -34,13 +46,21 @@ def register():
         username = request.form["username"]
         password = generate_password_hash(request.form["password"])
 
+        # Check if username already exists
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            return redirect("/")
+
         user = User(username=username, password=password, balance=1000)
         db.session.add(user)
         db.session.commit()
 
-        return redirect("/login")
+        # Auto-login after registration
+        session["user_id"] = user.id
+        return redirect("/")
 
-    return render_template("register.html")
+    # GET request: redirect to index
+    return redirect("/")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -55,42 +75,44 @@ def login():
             session["user_id"] = user.id
             return redirect("/")
         else:
-            return "Falsche Login-Daten"
+            # Failed login: go back to index, JS will detect no session and reopen modal
+            return redirect("/")
 
-    return render_template("login.html")
+    # GET request: redirect to index
+    return redirect("/")
 
 
 @app.route("/logout")
 def logout():
     session.clear()
-    return redirect("/login")
+    return redirect("/?no_modal=1")
 
 
 @app.route("/blackjack")
 def blackjack():
     if "user_id" not in session:
-        return redirect("/login")
+        return render_template("blackjack.html", balance=0, **get_template_context())
 
     user = User.query.get(session["user_id"])
-    return render_template("blackjack.html", balance=user.balance)
+    return render_template("blackjack.html", balance=user.balance, **get_template_context())
 
 
 @app.route("/roulette")
 def roulette():
     if "user_id" not in session:
-        return redirect("/login")
+        return render_template("roulette.html", balance=0, **get_template_context())
 
     user = User.query.get(session["user_id"])
-    return render_template("roulette.html", balance=user.balance)
+    return render_template("roulette.html", balance=user.balance, **get_template_context())
 
 
 @app.route("/plinko")
 def plinko():
     if "user_id" not in session:
-        return redirect("/login")
+        return render_template("plinko.html", balance=0, **get_template_context())
 
     user = User.query.get(session["user_id"])
-    return render_template("plinko.html", balance=user.balance)
+    return render_template("plinko.html", balance=user.balance, **get_template_context())
 
 # ------------------------
 # API ENDPOINTS
