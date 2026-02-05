@@ -5,7 +5,9 @@
 
 <div class="bg"></div>
 
+{% if session.get("user_id") %}
 <span id="balance">Balance: {{ balance }}</span>
+{% endif %}
 
 <div id="gameArea">
     <div id="dealerHand"></div>
@@ -23,7 +25,12 @@
             <span id="dollar">$</span>
             <input type="number" placeholder="100" id="bet" min="1" value="100"/>
         </div>
+        
+        {% if session.get("user_id") %}
         <button id="placeBetBtn">Place Bet</button>
+        {% else %}
+        <button id="loginToPlayBtn" onclick="openAuthModal('login')">Login to Play</button>
+        {% endif %}
     </div>
 
     <div id="currentBetContainer">
@@ -41,7 +48,7 @@
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/static/js/api.js"></script>
-<script src="/static/js/blackjack.js"></script>
 <script src="/static/js/utils.js"></script>
+<script src="/static/js/blackjack.js"></script>
 
 {% endblock %}

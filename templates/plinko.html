@@ -2,7 +2,10 @@
 {% block content %}
 <link rel="stylesheet" href="../static/css/plinko.css">
 <div id="gameArea">
+    {% if session.get("user_id") %}
     <div id="balance">Balance:</div>
+    {% endif %}
+    
     <div id="btnContainer">
         <p>Bet Amount</p>
         <div id="inputContainer">
@@ -15,20 +18,21 @@
         </div>
         <p>Risk Level</p>
             <div class="risk-track">
-                <!-- NO SLIDER DIV NEEDED -->
                 <button class="risk-option active" data-risk="low">LOW</button>
                 <button class="risk-option" data-risk="medium">MEDIUM</button>
                 <button class="risk-option" data-risk="high">HIGH</button>
                 <button class="risk-option rain" data-risk="rain">RAIN</button>
             </div>
         <p>‎</p>
+        
+        {% if session.get("user_id") %}
         <button id="dropBtn">Drop</button>
+        {% else %}
+        <button id="loginToPlayBtn" onclick="openAuthModal('login')">Login to Play</button>
+        {% endif %}
     </div>
     <canvas id="plinko"></canvas>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/static/js/plinko.js"></script>
-<script src="/static/js/utils.js"></script>
-<script src="/static/js/api.js"></script>
 {% endblock %}
