@@ -34,13 +34,13 @@ $(document).ready(function() {
     const thickness = 10;
     const radius = outerRadius - thickness / 2;
 
-    const segments = 20;
+    const segmentNum = 20;
     const gap = 0.12;
-    const segmentAngle = (Math.PI * 2 - segments * gap) / segments;
+    const segmentAngle = (Math.PI * 2 - segmentNum * gap) / segmentNum;
     const startAngleOffset = -Math.PI / 2 - segmentAngle / 2;
 
     const segmentColors = [];
-    for (let i = 0; i < segments; i++) {
+    for (let i = 0; i < segmentNum; i++) {
         if (i === 0) segmentColors.push("#44DE1D");
         else segmentColors.push(i % 2 === 0 ? "#F1005E" : "#203B5A");
     }
@@ -54,7 +54,7 @@ $(document).ready(function() {
     function drawStaticWheel() {
         let startAngle = startAngleOffset;
         bgCtx.lineCap = "round";
-        for (let i = 0; i < segments; i++) {
+        for (let i = 0; i < segmentNum; i++) {
             const endAngle = startAngle + segmentAngle;
             bgCtx.beginPath();
             bgCtx.arc(centerX, centerY, radius, startAngle, endAngle);
@@ -129,7 +129,7 @@ $(document).ready(function() {
     function updateSpin() {
         if (!isSpinning) return;
         if (spinSteps > 0) {
-            currentSegment = (currentSegment + 1) % segments;
+            currentSegment = (currentSegment + 1) % segmentNum;
             spinSteps--;
             if (spinSteps === 0) finishSpin(currentSegment);
         }
@@ -182,7 +182,7 @@ $(document).ready(function() {
 
     function startSpin() {
         isSpinning = true;
-        spinSteps = 50 + Math.floor(Math.random() * segments);
+        spinSteps = 50 + Math.floor(Math.random() * segmentNum);
     }
 
     function finishSpin(segmentIndex) {
