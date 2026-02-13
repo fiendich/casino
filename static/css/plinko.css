@@ -36,7 +36,8 @@ p {
 }
 
 canvas {
-    width: 70%;
+    width: 773px;
+    height: 680px;
     display: block;
     float: right;
 }

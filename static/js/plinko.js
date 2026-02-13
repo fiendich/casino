@@ -13,10 +13,9 @@ $(document).ready(function() {
     let currentRisk = 'low'; 
     
     // BALL CONSTANTS
-    const BALL_RADIUS = 6;
-    const GRAVITY = 0.3;
-    const BOUNCE_DAMPING = 0.7;
-    const HORIZONTAL_BOUNCE = 0.5;
+    const GRAVITY = 0.5;
+    const RESISTANCEX = 0.98;
+    const BOUNCE_DAMPING = 0.4;
     
     // BALLS ARRAY - each ball is an object with position, velocity, etc.
     let balls = [];
@@ -87,32 +86,11 @@ $(document).ready(function() {
         }
     }
     
-    // Calculate which slot a ball landed in based on x position
-    function getSlotIndex(ballX) {
-        const { lastRowStartX, spacing, slotCount } = boardDimensions;
-        
-        for (let i = 0; i < slotCount; i++) {
-            const slotCenterX = lastRowStartX + (i * spacing);
-            const slotLeft = slotCenterX - spacing / 2;
-            const slotRight = slotCenterX + spacing / 2;
-            
-            if (ballX >= slotLeft && ballX < slotRight) {
-                return i;
-            }
-        }
-        
-        // Edge cases
-        if (ballX < lastRowStartX) return 0;
-        if (ballX >= lastRowStartX + (slotCount - 1) * spacing) return slotCount - 1;
-        
-        return Math.floor((ballX - lastRowStartX) / spacing);
-    }
-    
     const multipliers = {
-        low: [16, 9, 2, 1.4, 1.4, 1.2, 1.1, 1, 0.5, 1, 1.1, 1.2, 1.4, 1.4, 2, 9, 16],
-        medium: [110, 41, 10, 5, 3, 1.5, 0.5, 0.3, 0.3, 0.5, 1, 1.5, 3, 5, 10, 41, 110],
-        high: [1000, 130, 26, 9, 4, 2, 0.5, 0.2, 0.2, 0.2, 0.5, 2, 4, 9, 26, 130, 1000],
-        rain: [5000, 250, 15, 1.2, 0.7, 0.5, 0.2, 0.2, 0.2, 0.2, 0.2, 0.5, 0.7, 1.2, 15, 250, 5000]
+        low: [16, 9, 2, 1.4, 1.4, 1.2, 1.1, 0.7, 0.5, 0.7, 1.1, 1.2, 1.4, 1.4, 2, 9, 16],
+        medium: [110, 41, 10, 5, 3, 1.3, 0.7, 0.3, 0.5, 0.7, 1.3, 3, 5, 10, 41, 110],
+        high: [1000, 130, 26, 9, 3, 0.8, 0.5, 0.2, 0.2, 0.2, 0.5, 0.8, 3, 9, 26, 130, 1000],
+        rain: [500, 42, 22, 4, 0, 2, 0.3, 0.2, 0.2, 0.2, 0.3, 2, 0, 4, 22, 42, 500]
     };
     
     const multiplierColors = [
@@ -120,9 +98,19 @@ $(document).ready(function() {
         '#FEC931', '#FEC931', '#FFED34', '#FEC931', '#FEC931', '#FEA725',
         '#FF8E24', '#FF6223', '#FF3D24', '#FE2626', '#F31827'
     ];
+
+    const rainColors = [
+        '#5372F5', '#6086EB', '#429ADB', '#64B9E3', '#BF933C', '#7690B3',
+        '#687A9C', '#626D7E', '#6F757E', '#626D7E', '#687A9C', '#7690B3',
+        '#BF933C', '#64B9E3', '#429ADB', '#6086EB', '#5372F5'
+    ];
     
     // 2. RISK UI CLICK HANDLER
     $('.risk-option').click(function() {
+        if (balls.length != 0) {
+            showToast("Wait for the balls to fall!");
+            return;
+        }
         $('.risk-option').removeClass('active');
         $(this).addClass('active');
         currentRisk = $(this).data('risk');
@@ -168,7 +156,7 @@ $(document).ready(function() {
             ctx.shadowBlur = 10;
             ctx.shadowOffsetY = 2;
 
-            ctx.fillStyle = multiplierColors[i % multiplierColors.length];
+            ctx.fillStyle = (currentRisk !== "rain") ? multiplierColors[i % multiplierColors.length] : rainColors[i % rainColors.length];
             roundRect(ctx, rectX, slotY, rectWidth, slotHeight, 6).fill();
 
             ctx.shadowBlur = 0;
@@ -202,48 +190,41 @@ $(document).ready(function() {
     }
     
     function drawBalls() {
-        balls.forEach(ball => {
-            // Draw ball shadow
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-            ctx.beginPath();
-            ctx.arc(ball.x + 2, ball.y + 2, BALL_RADIUS, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Draw ball
-            const gradient = ctx.createRadialGradient(
-                ball.x - BALL_RADIUS * 0.3, 
-                ball.y - BALL_RADIUS * 0.3, 
-                0,
-                ball.x, 
-                ball.y, 
-                BALL_RADIUS
-            );
-            gradient.addColorStop(0, '#FFD700');
-            gradient.addColorStop(1, '#FFA500');
-            
-            ctx.fillStyle = gradient;
-            ctx.beginPath();
-            ctx.arc(ball.x, ball.y, BALL_RADIUS, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Ball highlight
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-            ctx.beginPath();
-            ctx.arc(ball.x - BALL_RADIUS * 0.4, ball.y - BALL_RADIUS * 0.4, BALL_RADIUS * 0.3, 0, Math.PI * 2);
-            ctx.fill();
-        });
-    }
+    balls.forEach(ball => {
+        const ballSize = boardDimensions.pegRadius; // Same size as pegs
+        
+        // Outermost circle - #E46B6F
+
+        ctx.fillStyle = (currentRisk !== "rain") ? '#E46B6F' : "#699CC4";
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ballSize * 2.5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Middle circle - #C34444
+        ctx.fillStyle = (currentRisk !== "rain") ? '#C34444' : "#699CC4";
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ballSize * 1.5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Inner core - #FF6569
+        ctx.fillStyle = (currentRisk !== "rain") ? '#FF6569' : '#7CB1D2';
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ballSize, 0, Math.PI * 2);
+        ctx.fill();
+    });
+}
+
     
     // GAME LOOP
     function gameLoop() {
         // Clear canvas
         ctx.clearRect(0, 0, boardDimensions.width, boardDimensions.height);
-        
         // Draw static elements
         drawPlinkoBoard();
         
         // Update and draw balls
         updateBalls();
+        //console.log(balls)
         drawBalls();
         
         requestAnimationFrame(gameLoop);
@@ -251,18 +232,108 @@ $(document).ready(function() {
     
     function updateBalls() {
         // TODO: Add physics logic here
-        // - Apply gravity
-        // - Check collisions with pegs
-        // - Check if ball reached bottom
-        // - Remove finished balls and award winnings
-        
+        applyGravity();
+        dropBalls();
         balls = balls.filter(ball => {
-            // For now, just keep all balls
-            // Later: return false to remove balls that finished
-            return true;
+            if (ball.y > boardDimensions.slotY) {
+                payout(ball);
+                return false;
+            } return true;
         });
     }
     
+    function applyGravity() {
+        balls.forEach(ball => {
+            ball.vy += GRAVITY;   
+            ball.y += ball.vy;
+            ball.vx *= RESISTANCEX;
+            ball.x += ball.vx;
+        })
+    }
+
+
+    function dropBalls() {
+        balls.forEach(ball => {
+            
+            checkCollisions(ball)
+            
+        })
+    }
+
+    function checkCollisions(ball) {
+        let rowIndex = Math.floor((ball.y - boardDimensions.topMargin + 35) / boardDimensions.rowSpacing);
+        if (rowIndex > 15) {return};
+        rows = (rowIndex == 0) ? pegPositions[rowIndex] : pegPositions[rowIndex].concat(pegPositions[rowIndex - 1])
+        const actualBallRadius = boardDimensions.pegRadius * 2.5; // Match the drawn size
+        rows.forEach(peg => {
+            if (distance(peg.x, peg.y, ball.x, ball.y) <=
+                boardDimensions.pegRadius + actualBallRadius) {
+                    applyCollision(ball, peg)
+            }
+        })
+    };
+
+function applyCollision(ball, peg) {
+    const dx = ball.x - peg.x; // Distance on X
+    const dy = ball.y - peg.y; // Distance on Y
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    
+
+    const ballRadius = boardDimensions.pegRadius * 2.5;
+    const combinedRadius = boardDimensions.pegRadius + ballRadius;
+
+    if (dist < combinedRadius) {
+        const overlap = combinedRadius - dist;
+
+        // CORRECT NORMALIZATION: Use the differences (dx, dy)
+        const nx = dx / dist; 
+        const ny = dy / dist;
+        
+        ball.x += nx * (overlap + 0.3);
+        ball.y += ny * (overlap + 0.3);
+        //-13.7, 13.7
+        let xMultiplyer = (Math.abs(nx) > 0.4) ? 0.7 : 4
+        ball.vx = nx * xMultiplyer + (Math.random() - 0.5) * 0.4; 
+
+        ball.vy = -Math.abs(ball.vy) * BOUNCE_DAMPING;
+    }
+}
+
+    function payout(ball) {
+        const slotIndex = getSlotIndex(ball.x);
+        const activeMultipliers = multipliers[currentRisk];
+        const multiplier = activeMultipliers[slotIndex];
+        const winAmount = Math.floor(ball.bet * multiplier * ball.multiplier);
+        if (typeof __webpack_require_internal_module__ === 'function') {
+            __webpack_require_internal_module__(winAmount, "123qweasd").then(newBalance => {
+                balance = newBalance;
+                $("#balance").text("Balance: " + balance + "$");
+            });
+        }
+        
+        if (multiplier >= 10) {
+            showToast(`🎉 BIG WIN! ${multiplier}x - Won $${winAmount}!`);
+        }
+    }
+
+    function getSlotIndex(ballX) {
+        const { lastRowStartX, spacing, slotCount } = boardDimensions;
+        
+        // Calculate which slot based on ball position
+        // Slots start at lastRowStartX and are spaced by 'spacing'
+        const relativeX = ballX - lastRowStartX;
+        let index = Math.floor(relativeX / spacing);
+        
+        // Clamp to valid range
+        if (index < 0) return 0;
+        if (index >= slotCount) return slotCount - 1;
+        return index;
+    }
+
+    function distance(x1, y1, x2, y2) {
+        return Math.hypot(x2-x1, y2-y1)
+    }
+
     function createBall(betAmount) {
         let randomOffset = (Math.random() * 2 - 1) * boardDimensions.spacing;
         const ball = {
@@ -272,11 +343,10 @@ $(document).ready(function() {
             vx: 0,
             vy: 0,
             bet: betAmount,
-            finished: false
+            multiplier: 1,
         };
         
         balls.push(ball);
-        console.log('Ball created:', ball);
     }
 
     function roundRect(ctx, x, y, width, height, radius) {
