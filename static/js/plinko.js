@@ -179,11 +179,28 @@ $(document).ready(function() {
             ctx.textBaseline = 'middle';
             
             const val = activeMultipliers[i] !== undefined ? activeMultipliers[i] : 0;
-            ctx.fillText(
-                `×${val}`, 
-                x + spacing / 2, 
-                slotY + slotHeight / 2 + 1
-            );
+            let text = (val != 0) ? `×${val}` : `x2\nx100`
+            if (text) {
+                ctx.fillText(
+                    text, 
+                    x + spacing / 2, 
+                    slotY + slotHeight / 2 + 1
+                );
+            } else {
+                // Multi-line text for special slot
+                ctx.font = 'bold 9px Arial'; // Smaller font for two lines
+                ctx.fillText(
+                    '×2', 
+                    x + spacing / 2, 
+                    slotY + slotHeight / 2 - 5
+                );
+                ctx.fillText(
+                    '×100', 
+                    x + spacing / 2, 
+                    slotY + slotHeight / 2 + 7
+                );
+                ctx.font = 'bold 11px Arial'; // Reset font
+            }
 
             ctx.restore();
         }
@@ -254,9 +271,7 @@ $(document).ready(function() {
 
     function dropBalls() {
         balls.forEach(ball => {
-            
             checkCollisions(ball)
-            
         })
     }
 
@@ -291,10 +306,10 @@ function applyCollision(ball, peg) {
         
         ball.x += nx * (overlap + 0.3);
         ball.y += ny * (overlap + 0.3);
-        //-13.7, 13.7
+        
         let xMultiplyer = (Math.abs(nx) > 0.4) ? 0.7 : 4
-        ball.vx = nx * xMultiplyer + (Math.random() - 0.5) * 0.4; 
 
+        ball.vx = nx * xMultiplyer + (Math.random() - 0.5) * 0.4; 
         ball.vy = -Math.abs(ball.vy) * BOUNCE_DAMPING;
     }
 }
