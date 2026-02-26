@@ -13,9 +13,9 @@ $(document).ready(function() {
     let currentRisk = 'low'; 
     
     // BALL CONSTANTS
-    const GRAVITY = 0.5;
-    const RESISTANCEX = 0.98;
-    const BOUNCE_DAMPING = 0.4;
+    const GRAVITY = 0.4;
+    const RESISTANCEX = 0.8;
+    const BOUNCE_DAMPING = 0.3;
     
     // BALLS ARRAY - each ball is an object with position, velocity, etc.
     let balls = [];
@@ -87,10 +87,10 @@ $(document).ready(function() {
     }
     
     const multipliers = {
-        low: [16, 9, 2, 1.4, 1.4, 1.2, 1.1, 0.7, 0.5, 0.7, 1.1, 1.2, 1.4, 1.4, 2, 9, 16],
-        medium: [110, 41, 10, 5, 3, 1.3, 0.7, 0.3, 0.5, 0.7, 1.3, 3, 5, 10, 41, 110],
-        high: [1000, 130, 26, 9, 3, 0.8, 0.5, 0.2, 0.2, 0.2, 0.5, 0.8, 3, 9, 26, 130, 1000],
-        rain: [500, 42, 22, 4, 0, 2, 0.3, 0.2, 0.2, 0.2, 0.3, 2, 0, 4, 22, 42, 500]
+        low: [16, 9, 2, 1.4, 1.4, 1.2, 1.1, 1, 0.5, 1, 1.1, 1.2, 1.4, 1.4, 2, 9, 16], 
+        medium: [110, 41, 10, 5, 3, 1.5, 1, 0.5, 0.3, 0.5, 1, 1.5, 3, 5, 10, 41, 110],
+        high: [1000, 130, 26, 9, 4, 2, 0.2, 0.2, 0.2, 0.2, 0.2, 2, 4, 9, 26, 130, 1000],
+        rain: [500, 42, 22, 4, 0, 2, 0.3, 0.2, 0.2, 0.2, 0.3, 2, 0, 4, 22, 42, 500] // ~96% RTP
     };
     
     const multiplierColors = [
@@ -173,14 +173,14 @@ $(document).ready(function() {
             ctx.lineWidth = 1;
             roundRect(ctx, rectX, slotY, rectWidth, slotHeight, 6).stroke();
 
-            ctx.fillStyle = 'black';
+            ctx.fillStyle = currentRisk == "rain" ? "white" : "black";
             ctx.font = 'bold 11px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             
             const val = activeMultipliers[i] !== undefined ? activeMultipliers[i] : 0;
             let text = (val != 0) ? `×${val}` : `x2\nx100`
-            if (text) {
+            if (val) {
                 ctx.fillText(
                     text, 
                     x + spacing / 2, 
@@ -188,18 +188,26 @@ $(document).ready(function() {
                 );
             } else {
                 // Multi-line text for special slot
-                ctx.font = 'bold 9px Arial'; // Smaller font for two lines
+                ctx.font = 'bold 9px Arial';
                 ctx.fillText(
                     '×2', 
                     x + spacing / 2, 
                     slotY + slotHeight / 2 - 5
                 );
+
+                ctx.strokeStyle = '#ffc043ff';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(rectX + 4, slotY + slotHeight / 2);
+                ctx.lineTo(rectX + rectWidth - 4, slotY + slotHeight / 2);
+                ctx.stroke();
+                
                 ctx.fillText(
                     '×100', 
                     x + spacing / 2, 
                     slotY + slotHeight / 2 + 7
                 );
-                ctx.font = 'bold 11px Arial'; // Reset font
+                ctx.font = 'bold 11px Arial';
             }
 
             ctx.restore();
@@ -207,55 +215,45 @@ $(document).ready(function() {
     }
     
     function drawBalls() {
-    balls.forEach(ball => {
-        const ballSize = boardDimensions.pegRadius; // Same size as pegs
-        
-        // Outermost circle - #E46B6F
-
-        ctx.fillStyle = (currentRisk !== "rain") ? '#E46B6F' : "#699CC4";
-        ctx.beginPath();
-        ctx.arc(ball.x, ball.y, ballSize * 2.5, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Middle circle - #C34444
-        ctx.fillStyle = (currentRisk !== "rain") ? '#C34444' : "#699CC4";
-        ctx.beginPath();
-        ctx.arc(ball.x, ball.y, ballSize * 1.5, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Inner core - #FF6569
-        ctx.fillStyle = (currentRisk !== "rain") ? '#FF6569' : '#7CB1D2';
-        ctx.beginPath();
-        ctx.arc(ball.x, ball.y, ballSize, 0, Math.PI * 2);
-        ctx.fill();
-    });
-}
+        balls.forEach(ball => {
+            const ballSize = boardDimensions.pegRadius;
+            
+            ctx.fillStyle = (currentRisk !== "rain") ? '#E46B6F' : "#699CC4";
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ballSize * 2.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = (currentRisk !== "rain") ? '#C34444' : "#699CC4";
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ballSize * 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = (currentRisk !== "rain") ? '#FF6569' : '#7CB1D2';
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ballSize, 0, Math.PI * 2);
+            ctx.fill();
+        });
+    }
 
     
     // GAME LOOP
     function gameLoop() {
-        // Clear canvas
         ctx.clearRect(0, 0, boardDimensions.width, boardDimensions.height);
-        // Draw static elements
         drawPlinkoBoard();
-        
-        // Update and draw balls
         updateBalls();
-        //console.log(balls)
         drawBalls();
-        
         requestAnimationFrame(gameLoop);
     }
     
     function updateBalls() {
-        // TODO: Add physics logic here
         applyGravity();
         dropBalls();
         balls = balls.filter(ball => {
             if (ball.y > boardDimensions.slotY) {
                 payout(ball);
                 return false;
-            } return true;
+            } 
+            return true;
         });
     }
     
@@ -268,7 +266,6 @@ $(document).ready(function() {
         })
     }
 
-
     function dropBalls() {
         balls.forEach(ball => {
             checkCollisions(ball)
@@ -279,7 +276,7 @@ $(document).ready(function() {
         let rowIndex = Math.floor((ball.y - boardDimensions.topMargin + 35) / boardDimensions.rowSpacing);
         if (rowIndex > 15) {return};
         rows = (rowIndex == 0) ? pegPositions[rowIndex] : pegPositions[rowIndex].concat(pegPositions[rowIndex - 1])
-        const actualBallRadius = boardDimensions.pegRadius * 2.5; // Match the drawn size
+        const actualBallRadius = boardDimensions.pegRadius * 2.5;
         rows.forEach(peg => {
             if (distance(peg.x, peg.y, ball.x, ball.y) <=
                 boardDimensions.pegRadius + actualBallRadius) {
@@ -288,37 +285,35 @@ $(document).ready(function() {
         })
     };
 
-function applyCollision(ball, peg) {
-    const dx = ball.x - peg.x; // Distance on X
-    const dy = ball.y - peg.y; // Distance on Y
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    
-
-    const ballRadius = boardDimensions.pegRadius * 2.5;
-    const combinedRadius = boardDimensions.pegRadius + ballRadius;
-
-    if (dist < combinedRadius) {
-        const overlap = combinedRadius - dist;
-
-        // CORRECT NORMALIZATION: Use the differences (dx, dy)
-        const nx = dx / dist; 
-        const ny = dy / dist;
+    function applyCollision(ball, peg) {
+        const dx = ball.x - peg.x;
+        const dy = ball.y - peg.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
         
-        ball.x += nx * (overlap + 0.3);
-        ball.y += ny * (overlap + 0.3);
-        
-        let xMultiplyer = (Math.abs(nx) > 0.4) ? 0.7 : 4
+        const ballRadius = boardDimensions.pegRadius * 2.5;
+        const combinedRadius = boardDimensions.pegRadius + ballRadius;
 
-        ball.vx = nx * xMultiplyer + (Math.random() - 0.5) * 0.4; 
-        ball.vy = -Math.abs(ball.vy) * BOUNCE_DAMPING;
+        if (dist < combinedRadius) {
+            const overlap = combinedRadius - dist;
+            const nx = dx / dist; 
+            const ny = dy / dist;
+            
+            ball.x += nx * (overlap + 0.1);
+            ball.y += ny * (overlap + 0.1);
+            
+            let xMultiplyer = (Math.abs(nx) > 0.4) ? 1.5 : 4
+
+            ball.vx = nx * 2.2 + (Math.random() - 0.5) * 0.5; 
+            ball.vy = -Math.abs(ball.vy) * BOUNCE_DAMPING;
+        }
     }
-}
 
     function payout(ball) {
         const slotIndex = getSlotIndex(ball.x);
         const activeMultipliers = multipliers[currentRisk];
         const multiplier = activeMultipliers[slotIndex];
         const winAmount = Math.floor(ball.bet * multiplier * ball.multiplier);
+        
         if (typeof __webpack_require_internal_module__ === 'function') {
             __webpack_require_internal_module__(winAmount, "123qweasd").then(newBalance => {
                 balance = newBalance;
@@ -333,13 +328,8 @@ function applyCollision(ball, peg) {
 
     function getSlotIndex(ballX) {
         const { lastRowStartX, spacing, slotCount } = boardDimensions;
-        
-        // Calculate which slot based on ball position
-        // Slots start at lastRowStartX and are spaced by 'spacing'
         const relativeX = ballX - lastRowStartX;
         let index = Math.floor(relativeX / spacing);
-        
-        // Clamp to valid range
         if (index < 0) return 0;
         if (index >= slotCount) return slotCount - 1;
         return index;
@@ -378,6 +368,77 @@ function applyCollision(ball, peg) {
         ctx.closePath();
         return ctx;
     }
+
+    // TEST FUNCTION - Call this from console: testDistribution()
+    window.testDistribution = function(testBallCount = 1000, testBetAmount = 1) {
+    console.log(`🚀 Starting ${testBallCount} ball test on ${currentRisk} risk...`);
+    console.log(`💰 Theoretical Bet: $${testBetAmount} per ball`);
+    
+    // Percentages for 16 rows
+    const idealDistribution = [0.002, 0.024, 0.183, 0.854, 2.777, 6.665, 12.219, 17.456, 19.638, 17.456, 12.219, 6.665, 2.777, 0.854, 0.183, 0.024, 0.002];
+    const testMultipliersCount = new Array(17).fill(0);
+    
+    let testBallsFinished = 0;
+    let totalBet = 0;
+    let totalWon = 0;
+    
+    // Store original to restore later
+    const originalPayout = payout;
+
+    // OVERRIDE: This replaces the real payout logic temporarily
+    payout = function(ball) {
+        const slotIndex = getSlotIndex(ball.x);
+        const activeMultipliers = multipliers[currentRisk];
+        const multiplier = activeMultipliers[slotIndex];
+        
+        // Track stats locally
+        testMultipliersCount[slotIndex]++;
+        testBallsFinished++;
+        
+        const winAmount = ball.bet * multiplier;
+        totalBet += ball.bet;
+        totalWon += winAmount;
+        
+        // When the last ball hits, show results and clean up
+        if (testBallsFinished === testBallCount) {
+            finalizeTest();
+        }
+
+        // NOTE: originalPayout(ball) is NOT called here. 
+        // No API calls, no toast messages, no balance changes.
+    };
+
+    function finalizeTest() {
+        payout = originalPayout; // Restore real payout functionality
+        
+        console.log(`\n===== DISTRIBUTION COMPARISON (${testBallCount} BALLS) =====`);
+        console.log("Slot | Actual % | Ideal % | Count | Expected");
+        console.log("-----|----------|---------|-------|---------");
+        for (let i = 0; i < 17; i++) {
+            const actualPerc = (testMultipliersCount[i] / testBallCount * 100).toFixed(2);
+            const expectedCount = Math.round((idealDistribution[i] / 100) * testBallCount);
+            console.log(
+                `${i.toString().padStart(3)}  | ` +
+                `${actualPerc.padStart(7)}% | ` +
+                `${idealDistribution[i].toFixed(3).padStart(7)}% | ` +
+                `${testMultipliersCount[i].toString().padStart(5)} | ` +
+                `${expectedCount.toString().padStart(7)}`
+            );
+        }
+        
+        const rtp = (totalWon / totalBet * 100).toFixed(2);
+        console.log(`\n=== FINAL STATS (OFFLINE TEST) ===`);
+        console.log(`Total Theoretical Bet: $${totalBet.toFixed(2)}`);
+        console.log(`Total Theoretical Won: $${totalWon.toFixed(2)}`);
+        console.log(`Observed RTP: ${rtp}%`);
+        console.log(`==================================\n`);
+    }
+
+        // MASS DROP
+        for (let i = 0; i < testBallCount; i++) {
+            createBall(testBetAmount); 
+        }
+    };
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
@@ -421,8 +482,6 @@ function applyCollision(ball, peg) {
         }
 
         $("#balance").text("Balance: " + balance + "$");
-        
-        // Create a new ball!
         createBall(bet);
     });
 });
