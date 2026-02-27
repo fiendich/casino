@@ -371,26 +371,26 @@ $(document).ready(function() {
 
     // TEST FUNCTION - Call this from console: testDistribution()
     window.testDistribution = function(testBallCount = 1000, testBetAmount = 1) {
-    console.log(`🚀 Starting ${testBallCount} ball test on ${currentRisk} risk...`);
-    console.log(`💰 Theoretical Bet: $${testBetAmount} per ball`);
+        console.log(`🚀 Starting ${testBallCount} ball test on ${currentRisk} risk...`);
+        console.log(`💰 Theoretical Bet: $${testBetAmount} per ball`);
     
-    // Percentages for 16 rows
-    const idealDistribution = [0.002, 0.024, 0.183, 0.854, 2.777, 6.665, 12.219, 17.456, 19.638, 17.456, 12.219, 6.665, 2.777, 0.854, 0.183, 0.024, 0.002];
-    const testMultipliersCount = new Array(17).fill(0);
-    
-    let testBallsFinished = 0;
-    let totalBet = 0;
-    let totalWon = 0;
-    
-    // Store original to restore later
-    const originalPayout = payout;
-
-    // OVERRIDE: This replaces the real payout logic temporarily
-    payout = function(ball) {
-        const slotIndex = getSlotIndex(ball.x);
-        const activeMultipliers = multipliers[currentRisk];
-        const multiplier = activeMultipliers[slotIndex];
+        // Percentages for 16 rows
+        const idealDistribution = [0.002, 0.024, 0.183, 0.854, 2.777, 6.665, 12.219, 17.456, 19.638, 17.456, 12.219, 6.665, 2.777, 0.854, 0.183, 0.024, 0.002];
+        const testMultipliersCount = new Array(17).fill(0);
         
+        let testBallsFinished = 0;
+        let totalBet = 0;
+        let totalWon = 0;
+    
+        // Store original to restore later
+        const originalPayout = payout;
+    
+        // OVERRIDE: This replaces the real payout logic temporarily
+        payout = function(ball) {
+            const slotIndex = getSlotIndex(ball.x);
+            const activeMultipliers = multipliers[currentRisk];
+            const multiplier = activeMultipliers[slotIndex];
+            
         // Track stats locally
         testMultipliersCount[slotIndex]++;
         testBallsFinished++;
