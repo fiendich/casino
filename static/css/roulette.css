@@ -30,16 +30,35 @@
     padding: 20px;
     box-sizing: border-box;
     z-index: 2;
-
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
+#colorBetPanel {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;         /* Abstand zwischen Buttons */
+    justify-content: center;  /* optional: mittig im Panel */
+    flex-wrap: wrap;
+}
+
+#colorBetPanel .bet-btn {
+    width: 75px;
+    height: 40px;
+    font-size: 12px;
+    padding: 0;
+    border: none;
+}
+.bet-btn[data-bet="red"]   { background: linear-gradient(145deg, #F1005E, #a0003e); }
+.bet-btn[data-bet="blue"]  { background: linear-gradient(145deg, #203B5A, #0d1f30); }
+.bet-btn[data-bet="green"] { background: linear-gradient(145deg, #44DE1D, #2a8c10); }
+
+
+
 /* Buttons generell */
 button {
-    width: 130px;
-    height: 55px;
+   
     font-size: 17px;
     font-weight: bold;
     letter-spacing: 0.5px;
@@ -95,17 +114,39 @@ canvas {
     cursor: not-allowed;
 }
 
+.number-bet-btn.green-num {
+    background: linear-gradient(145deg, #44DE1D, #1f6b0a);
+    border: 1px solid #44DE1D;
+    color: white;
+    box-shadow: 0 0 8px rgba(68, 222, 29, 0.3);
+}
+
+.number-bet-btn.red-num {
+    background: linear-gradient(145deg, #F1005E, #8B0035);
+    border: 1px solid #F1005E;
+    color: white;
+    box-shadow: 0 0 8px rgba(241, 0, 94, 0.3);
+}
+
+.number-bet-btn.blue-num {
+    background: linear-gradient(145deg, #2E5F9E, #0d1f30);
+    border: 1px solid #2E5F9E;
+    color: white;
+    box-shadow: 0 0 8px rgba(46, 95, 158, 0.3);
+}
 /* History Bar über dem Canvas */
 #historyBar {
-    display: flex;
+    display: inline-flex;
+    justify-content: center;
     gap: 6px;
     margin-bottom: 10px;
     position: absolute;
-    top: 100px;
-    left: 50%;
+    top: 50px;
+    left: 60%;
     transform: translateX(-50%);
     z-index: 5;
 }
+
 
 /* einzelne History-Farben */
 #historyBar .history-color {
@@ -113,4 +154,27 @@ canvas {
     height: 24px;
     border-radius: 50%;
     border: 1px solid #333;
+}
+
+#myWheel {
+    position: relative; /* oder absolute, je nach Layout */
+    left: 60%/* Verschiebung nach rechts */
+}
+
+#numberBetPanel {
+    display: grid;
+    grid-template-columns: repeat(7, 40px); /* 3 Reihen à 7 Buttons */
+    gap: 5px;
+}
+
+.number-bet-btn {
+    
+    width: 40px;
+    height: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.active {
+    background: #5660C9 !important;
 }

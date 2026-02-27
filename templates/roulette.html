@@ -6,29 +6,63 @@
 
     <!-- Left Panel für Bets -->
     <div id="left-panel">
+        {% if session.get("user_id") %}
         <div id="balance">Balance: </div>
-
+        {% endif %}
     <div id="bet-controls">
     <input type="number" id="betInput" value="100" min="1">
     </div>
 
-<p>Set color (click to bet):</p>
-<button class="bet-btn" data-bet="red">Rot x2</button>
-<button class="bet-btn" data-bet="blue">Blau x2</button>
-<button class="bet-btn" data-bet="green">Grün x14</button>
+    <p>Set color (click to bet):</p>
+    <div id="colorBetPanel">
+    <button class="bet-btn" data-bet="red">Rot x2</button>
+    <button class="bet-btn" data-bet="blue">Blau x2</button>
+    <button class="bet-btn" data-bet="green">Grün x20</button>
     </div>
-    
-    
+
+ <h3>Setze auf Zahl</h3>
+    <div id="numberBetPanel">
+      <div id="numberBetPanel">
+    <button class="number-bet-btn green-num"  data-number="0">0</button>
+    <button class="number-bet-btn blue-num"   data-number="17">17</button>
+    <button class="number-bet-btn red-num"    data-number="8">8</button>
+    <button class="number-bet-btn blue-num"   data-number="3">3</button>
+    <button class="number-bet-btn red-num"    data-number="14">14</button>
+    <button class="number-bet-btn blue-num"   data-number="1">1</button>
+    <button class="number-bet-btn red-num"    data-number="6">6</button>
+    <button class="number-bet-btn blue-num"   data-number="19">19</button>
+    <button class="number-bet-btn red-num"    data-number="20">20</button>
+    <button class="number-bet-btn blue-num"   data-number="5">5</button>
+    <button class="number-bet-btn red-num"    data-number="12">12</button>
+    <button class="number-bet-btn blue-num"   data-number="9">9</button>
+    <button class="number-bet-btn red-num"    data-number="2">2</button>
+    <button class="number-bet-btn blue-num"   data-number="7">7</button>
+    <button class="number-bet-btn red-num"    data-number="16">16</button>
+    <button class="number-bet-btn blue-num"   data-number="4">4</button>
+    <button class="number-bet-btn red-num"    data-number="13">13</button>
+    <button class="number-bet-btn blue-num"   data-number="11">11</button>
+    <button class="number-bet-btn red-num"    data-number="18">18</button>
+    <button class="number-bet-btn blue-num"   data-number="10">10</button>
+    <button class="number-bet-btn red-num"    data-number="15">15</button>
+</div>
+    </div>
+    <p>Set range (3x payout):</p>
+        <div id="rangeBetPanel">
+            <button class="bet-btn range-bet-btn" data-range-min="0" data-range-max="6">0–6 x3</button>
+            <button class="bet-btn range-bet-btn" data-range-min="7" data-range-max="13">7–13 x3</button>
+            <button class="bet-btn range-bet-btn" data-range-min="14" data-range-max="20">14–20 x3</button>
+        </div>
+    </div>    
 
     <!-- Canvas Wheel + History Bar-->
-    <div id="historyBar" style="display:flex; gap:4px; margin-bottom:10px;"></div> 
-    <canvas id="myWheel" width="700" height="500">
+    <div id="historyBar" style="display: flex; text-align: center; gap:4px; margin-bottom:10px;"></div> 
+    <canvas id="myWheel" width="1000" height="650">
         Sorry, your browser does not support canvas.
     </canvas>
 
 </div>
 
-<!-- Spin Button unter Canvas -->
+
 
 
 <link rel="stylesheet" href="../static/css/roulette.css">
