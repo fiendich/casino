@@ -34,10 +34,10 @@ def get_template_context():
 def index():
     if "user_id" not in session:
         # Not logged in: render index with no balance, modal will open via JS
-        return render_template("index.html", balance=0, **get_template_context())
+        return render_template("index.html", balance = 0, **get_template_context())
 
     user = User.query.get(session["user_id"])
-    return render_template("index.html", balance=user.balance, **get_template_context())
+    return render_template("index.html", balance = round(user.balance, 2), **get_template_context())
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -94,7 +94,7 @@ def blackjack():
         return render_template("blackjack.html", balance=0, **get_template_context())
 
     user = User.query.get(session["user_id"])
-    return render_template("blackjack.html", balance=user.balance, **get_template_context())
+    return render_template("blackjack.html", balance=round(user.balance, 2), **get_template_context())
 
 
 @app.route("/roulette")
@@ -103,7 +103,7 @@ def roulette():
         return render_template("roulette.html", balance=0, **get_template_context())
 
     user = User.query.get(session["user_id"])
-    return render_template("roulette.html", balance=user.balance, **get_template_context())
+    return render_template("roulette.html", balance=round(user.balance, 2), **get_template_context())
 
 
 @app.route("/plinko")
@@ -112,7 +112,7 @@ def plinko():
         return render_template("plinko.html", balance=0, **get_template_context())
 
     user = User.query.get(session["user_id"])
-    return render_template("plinko.html", balance=user.balance, **get_template_context())
+    return render_template("plinko.html", balance=round(user.balance, 2), **get_template_context())
 
 # ------------------------
 # API ENDPOINTS
@@ -124,7 +124,7 @@ def get_balance():
         return jsonify({"error": "not logged in"}), 403
 
     user = User.query.get(session["user_id"])
-    return jsonify({"balance": user.balance})
+    return jsonify({"balance": round(user.balance, 2)})
 
 
 @app.route("/update_balance", methods=["POST"])
@@ -139,7 +139,7 @@ def update_balance():
     user.balance += amount
     db.session.commit()
 
-    return jsonify({"balance": user.balance})
+    return jsonify({"balance": round(user.balance, 2)})
 
 
 if __name__ == "__main__":

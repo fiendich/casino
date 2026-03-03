@@ -303,8 +303,6 @@ $(document).ready(function() {
             
             ball.x += nx * (overlap + 0.1);
             ball.y += ny * (overlap + 0.1);
-            
-            let xMultiplyer = (Math.abs(nx) > 0.4) ? 1.5 : 4
 
             ball.vx = nx * 2.2 + (Math.random() - 0.5) * 0.5; 
             ball.vy = -Math.abs(ball.vy) * BOUNCE_DAMPING;
@@ -354,15 +352,15 @@ $(document).ready(function() {
             return;
         }
         const winAmount = Math.round(ball.bet * multiplier * ball.multiplier * 100) / 100;
-        showToast(winAmount)
+        //showToast(winAmount)
         if (typeof __webpack_require_internal_module__ === 'function') {
             __webpack_require_internal_module__(winAmount, "123qweasd").then(newBalance => {
                 balance = newBalance;
-                $("#balance").text("Balance: " + balance + "$");
+                $("#balance").text("Balance: " + balance.toFixed(2) + "$");
             });
         }
         
-        if (multiplier >= 10) {
+        if (multiplier * ball.multiplier >= 10) {
             showToast(`🎉 BIG WIN! ${multiplier}x - Won $${winAmount}!`);
         }
     }
@@ -411,7 +409,6 @@ $(document).ready(function() {
         return ctx;
     }
 
-    // TEST FUNCTION - Call this from console: testDistribution()
     // TEST FUNCTION - Call this from console: testDistribution()
     // window.testDistribution = function(testBallCount = 1000, testBetAmount = 1) {
     //     console.log(`🚀 Starting ${testBallCount} ball test on ${currentRisk} risk...`);
@@ -501,17 +498,17 @@ $(document).ready(function() {
     // Start game loop
     gameLoop();
     
-    $("#balance").text("Balance: " + balance + "$");
+    $("#balance").text("Balance: " + balance.toFixed(2) + "$");
 
     $("#inputHalf, #inputDouble, #inputMax, #placeBetBtn").off("click");
         
     $("#inputHalf").on("click", function() {
-        let currentVal = parseInt($("#bet").val()) || 0;
+        let currentVal = parseFloat($("#bet").val()) || 0;
         $("#bet").val(Math.floor(currentVal / 2));
     });
 
     $("#inputDouble").on("click", function() {
-        let currentVal = parseInt($("#bet").val()) || 0;
+        let currentVal = parseFloat($("#bet").val()) || 0;
         let newVal = Math.min(currentVal * 2, balance);
         $("#bet").val(newVal);
     });
@@ -521,7 +518,7 @@ $(document).ready(function() {
     });
 
     $("#dropBtn").off("click").on("click", async function () {
-        bet = parseInt($("#bet").val());
+        bet = parseFloat($("#bet").val());
         
         if (isNaN(bet) || bet <= 0) {
             showToast("Enter a valid bet!");
@@ -536,7 +533,7 @@ $(document).ready(function() {
             balance = await __webpack_require_internal_module__(-bet, "123qweasd");
         }
 
-        $("#balance").text("Balance: " + balance + "$");
+        $("#balance").text("Balance: " + balance.toFixed(2) + "$");
         createBall(bet);
     });
 });

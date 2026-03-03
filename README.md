@@ -30,7 +30,7 @@ python -m venv .venv
 
 Activate it (CMD or PowerShell):
 
-venv\Scripts\activate
+.venv\Scripts\activate
 
 If PowerShell blocks activation, run once:
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
