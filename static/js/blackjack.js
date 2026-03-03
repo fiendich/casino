@@ -196,7 +196,6 @@ $(document).ready(function(){
   function resetUI() {
     $("#dealerValue").text("-");
     $("#playerValue").text("-");
-    $("#balance").text("Balance: " + balance.toFixed(2) + "$");
     $("#dealerHand .card, #playerHand .card").removeClass("winner-border tie");
     $("#dealerValue, #playerValue").removeClass("winner-value winner-animation tie-value");
   }
@@ -279,7 +278,6 @@ async function placeBet() {
             $("#buttons").show();
             $("#currentBetContainer").show();
             $("#currentBet").text(currentBet + "$");
-            $("#balance").text("Balance: " + balance.toFixed(2) + "$");
             
             resolve();
         });
@@ -351,8 +349,6 @@ async function placeBet() {
             break;
         }
 
-    
-    $("#balance").text("Balance: " + balance.toFixed(2) + "$");
     $("#currentBet").text("")
   }
 

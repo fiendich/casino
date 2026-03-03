@@ -533,7 +533,6 @@ $(document).ready(function() {
             balance = await __webpack_require_internal_module__(-bet, "123qweasd");
         }
 
-        $("#balance").text("Balance: " + balance.toFixed(2) + "$");
         createBall(bet);
     });
 });
