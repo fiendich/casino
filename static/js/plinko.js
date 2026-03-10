@@ -232,6 +232,14 @@ $(document).ready(function() {
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ballSize, 0, Math.PI * 2);
             ctx.fill();
+
+            if (ball.hasMultiplier) {
+                ctx.fillStyle = 'white';
+                ctx.font = `bold ${ballSize * 3.3}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(`${ball.multiplier}`, ball.x, ball.y+1);
+            }
         });
     }
 
@@ -309,7 +317,7 @@ $(document).ready(function() {
         }
     }
 
-    function getGamblingMultiplier(min = 2, max = 100, gravity = 5) {
+    function getGamblingMultiplier(min = 2, max = 100, gravity = 8) {
         let r = Math.random(); 
         let skewed = Math.pow(r, gravity);
         let result = skewed * (max - min) + min;
@@ -347,7 +355,7 @@ $(document).ready(function() {
         
         if (currentRisk === "rain" && multiplier == 0) {
             multiplier = getGamblingMultiplier();
-            showToast(multiplier);
+            //showToast(multiplier);
             createBall(ball.bet, ball.multiplier * multiplier, true, newBalls);
             return;
         }
@@ -356,12 +364,11 @@ $(document).ready(function() {
         if (typeof __webpack_require_internal_module__ === 'function') {
             __webpack_require_internal_module__(winAmount, "123qweasd").then(newBalance => {
                 balance = newBalance;
-                $("#balance").text("Balance: " + balance.toFixed(2) + "$");
             });
         }
         
         if (multiplier * ball.multiplier >= 10) {
-            showToast(`🎉 BIG WIN! ${multiplier}x - Won $${winAmount}!`);
+            showToast(`🎉 BIG WIN! ${multiplier * ball.multiplier}x - Won $${winAmount}!`);
         }
     }
 
@@ -410,88 +417,82 @@ $(document).ready(function() {
     }
 
     // TEST FUNCTION - Call this from console: testDistribution()
-    // window.testDistribution = function(testBallCount = 1000, testBetAmount = 1) {
-    //     console.log(`🚀 Starting ${testBallCount} ball test on ${currentRisk} risk...`);
-    //     console.log(`💰 Theoretical Bet: $${testBetAmount} per ball`);
+    window.testDistribution = function(testBallCount = 1000, testBetAmount = 1) {
+        console.log(`🚀 Starting ${testBallCount} ball test on ${currentRisk} risk...`);
+        console.log(`💰 Theoretical Bet: $${testBetAmount} per ball`);
         
-    //     // Percentages for 16 rows
-    //     const idealDistribution = [0.002, 0.024, 0.183, 0.854, 2.777, 6.665, 12.219, 17.456, 19.638, 17.456, 12.219, 6.665, 2.777, 0.854, 0.183, 0.024, 0.002];
-    //     const testMultipliersCount = new Array(17).fill(0);
+        // Percentages for 16 rows
+        const idealDistribution = [0.002, 0.024, 0.183, 0.854, 2.777, 6.665, 12.219, 17.456, 19.638, 17.456, 12.219, 6.665, 2.777, 0.854, 0.183, 0.024, 0.002];
+        const testMultipliersCount = new Array(17).fill(0);
         
-    //     let testBallsFinished = 0;
-    //     let totalBet = 0;
-    //     let totalWon = 0;
-    //     let goldenBallsCreated = 0;
+        let testBallsFinished = 0;
+        let totalBet = testBallCount * testBetAmount;
+        let totalWon = 0;
+        let goldenBallsCreated = 0;
         
-    //     // Store original to restore later
-    //     const originalPayout = payout;
+        // Store original to restore later
+        const originalPayout = payout;
 
-    //     // OVERRIDE: This replaces the real payout logic temporarily
-    //     payout = function(ball) {
-    //         const slotIndex = getSlotIndex(ball.x);
-    //         const activeMultipliers = multipliers[currentRisk];
-    //         let multiplier = activeMultipliers[slotIndex];
+        // OVERRIDE: This replaces the real payout logic temporarily
+        payout = function(ball, newBalls = balls) {  // accept newBalls
+            const slotIndex = getSlotIndex(ball.x);
+            const activeMultipliers = multipliers[currentRisk];
+            let multiplier = activeMultipliers[slotIndex];
             
-    //         // HANDLE RAIN MODE - create golden ball
-    //         if (currentRisk === "rain" && multiplier == 0) {
-    //             multiplier = getGamblingMultiplier();
-    //             createBall(ball.bet, ball.multiplier * multiplier, true);
-    //             goldenBallsCreated++;
-    //             // Don't count this as a finished ball or add to stats
-    //             return;
-    //         }
+            if (currentRisk === "rain" && multiplier == 0) {
+                multiplier = getGamblingMultiplier();
+                //showToast(multiplier);
+                createBall(ball.bet, ball.multiplier * multiplier, true, newBalls);  // pass it through
+                goldenBallsCreated++;
+                return;
+            }
             
-    //         // Track stats locally
-    //         testMultipliersCount[slotIndex]++;
-    //         testBallsFinished++;
+            testMultipliersCount[slotIndex]++;
+            testBallsFinished++;
             
-    //         const winAmount = ball.bet * multiplier * ball.multiplier;
-    //         totalBet += ball.bet;
-    //         totalWon += winAmount;
+            const winAmount = ball.bet * multiplier * ball.multiplier;
+            totalWon += winAmount;
             
-    //         // When the last ball hits, show results and clean up
-    //         if (testBallsFinished === testBallCount) {
-    //             finalizeTest();
-    //         }
+            if (testBallsFinished === testBallCount) {
+                finalizeTest();
+            }
+        };
 
-    //         // NOTE: originalPayout(ball) is NOT called here. 
-    //         // No API calls, no toast messages, no balance changes.
-    //     };
-
-    //     function finalizeTest() {
-    //         payout = originalPayout; // Restore real payout functionality
+        function finalizeTest() {
+            payout = originalPayout; // Restore real payout functionality
             
-    //         console.log(`\n===== DISTRIBUTION COMPARISON (${testBallCount} BALLS) =====`);
-    //         console.log("Slot | Actual % | Ideal % | Count | Expected");
-    //         console.log("-----|----------|---------|-------|---------");
-    //         for (let i = 0; i < 17; i++) {
-    //             const actualPerc = (testMultipliersCount[i] / testBallCount * 100).toFixed(2);
-    //             const expectedCount = Math.round((idealDistribution[i] / 100) * testBallCount);
-    //             console.log(
-    //                 `${i.toString().padStart(3)}  | ` +
-    //                 `${actualPerc.padStart(7)}% | ` +
-    //                 `${idealDistribution[i].toFixed(3).padStart(7)}% | ` +
-    //                 `${testMultipliersCount[i].toString().padStart(5)} | ` +
-    //                 `${expectedCount.toString().padStart(7)}`
-    //             );
-    //         }
+            console.log(`\n===== DISTRIBUTION COMPARISON (${testBallCount} BALLS) =====`);
+            console.log("Slot | Actual % | Ideal % | Count | Expected");
+            console.log("-----|----------|---------|-------|---------");
+            for (let i = 0; i < 17; i++) {
+                const actualPerc = (testMultipliersCount[i] / testBallCount * 100).toFixed(2);
+                const expectedCount = Math.round((idealDistribution[i] / 100) * testBallCount);
+                console.log(
+                    `${i.toString().padStart(3)}  | ` +
+                    `${actualPerc.padStart(7)}% | ` +
+                    `${idealDistribution[i].toFixed(3).padStart(7)}% | ` +
+                    `${testMultipliersCount[i].toString().padStart(5)} | ` +
+                    `${expectedCount.toString().padStart(7)}`
+                );
+            }
             
-    //         const rtp = (totalWon / totalBet * 100).toFixed(2);
-    //         console.log(`\n=== FINAL STATS (OFFLINE TEST) ===`);
-    //         console.log(`Total Theoretical Bet: $${totalBet.toFixed(2)}`);
-    //         console.log(`Total Theoretical Won: $${totalWon.toFixed(2)}`);
-    //         console.log(`Observed RTP: ${rtp}%`);
-    //         if (currentRisk === "rain") {
-    //             console.log(`Golden Balls Created: ${goldenBallsCreated}`);
-    //         }
-    //         console.log(`==================================\n`);
-    //     }
+            const rtp = (totalWon / totalBet * 100).toFixed(2);
+            console.log(`\n=== FINAL STATS (OFFLINE TEST) ===`);
+            console.log(`Total Theoretical Bet: $${totalBet.toFixed(2)}`);
+            console.log(`Total Theoretical Won: $${totalWon.toFixed(2)}`);
+            console.log(`Observed RTP: ${rtp}%`);
+            if (currentRisk === "rain") {
+                console.log(`Golden Balls Created: ${goldenBallsCreated}`);
+            }
+            console.log(`==================================\n`);
+        }
 
-    //     // MASS DROP
-    //     for (let i = 0; i < testBallCount; i++) {
-    //         createBall(testBetAmount); 
-    //     }
-    // };
+        // MASS DROP
+        for (let i = 0; i < testBallCount; i++) {
+            createBall(testBetAmount); 
+        }
+    };
+
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
     
@@ -503,8 +504,8 @@ $(document).ready(function() {
     $("#inputHalf, #inputDouble, #inputMax, #placeBetBtn").off("click");
         
     $("#inputHalf").on("click", function() {
-        let currentVal = parseFloat($("#bet").val()) || 0;
-        $("#bet").val(Math.floor(currentVal / 2));
+        let currentVal = parseFloat($("#bet").val()) / 2 || 0;
+        $("#bet").val(currentVal.toFixed(2));
     });
 
     $("#inputDouble").on("click", function() {
