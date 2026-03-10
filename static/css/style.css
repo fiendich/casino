@@ -104,6 +104,12 @@ nav {
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
 }
 
+.auth-error {
+    display:none;
+    color:#ff4d4d;
+    margin-bottom:8px;
+    margin-top:8px;
+}
 /*home button*/
 #SigmaSpin {
     z-index: 1000;

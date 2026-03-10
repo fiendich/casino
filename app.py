@@ -40,46 +40,32 @@ def index():
     return render_template("index.html", balance = round(user.balance, 2), **get_template_context())
 
 
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = generate_password_hash(request.form["password"])
-
-        # Check if username already exists
-        existing_user = User.query.filter_by(username=username).first()
-        if existing_user:
-            return redirect("/")
-
-        user = User(username=username, password=password, balance=1000)
-        db.session.add(user)
-        db.session.commit()
-
-        # Auto-login after registration
-        session["user_id"] = user.id
-        return redirect("/")
-
-    # GET request: redirect to index
-    return redirect("/")
-
-
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods=["POST"])
 def login():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
+    username = request.form["username"]
+    password = request.form["password"]
+    user = User.query.filter_by(username=username).first()
 
-        user = User.query.filter_by(username=username).first()
+    if user and check_password_hash(user.password, password):
+        session["user_id"] = user.id
+        return jsonify({"success": True})
+    
+    return jsonify({"success": False, "error": "Invalid username or password"})
 
-        if user and check_password_hash(user.password, password):
-            session["user_id"] = user.id
-            return redirect("/")
-        else:
-            # Failed login: go back to index, JS will detect no session and reopen modal
-            return redirect("/")
 
-    # GET request: redirect to index
-    return redirect("/")
+@app.route("/register", methods=["POST"])
+def register():
+    username = request.form["username"]
+    password = generate_password_hash(request.form["password"])
+
+    if User.query.filter_by(username=username).first():
+        return jsonify({"success": False, "error": "Username already taken"})
+
+    user = User(username=username, password=password, balance=1000)
+    db.session.add(user)
+    db.session.commit()
+    session["user_id"] = user.id
+    return jsonify({"success": True})
 
 
 @app.route("/logout")
