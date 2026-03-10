@@ -7,22 +7,36 @@ html, body {
     padding: 0;
     height: 100%;
     overflow: hidden;
+
 }
 
 /*Die Navigations leiste ganz oben*/
 nav {
+    position: relative;
+    left: 0;
+    right: 0;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     padding: 10px 24px;
-    background-color: #1A1C3D;
-    height: 64px;
+    height: 93px;
+
     font-family: 'Inter', sans-serif;
-    position: relative;
+    background-color: #1A1C3D;
+
+    background-image: url("/static/images/logo/never.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%; /* streckt das Bild über die gesamte Nav */
+
+    
+    max-width: 1920px;
+    margin: 0 auto;
+
     z-index: 1000;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-    background-image: url("/static/images/logo/never.png");
-    border-bottom:#1e6fd9;
 }
 
 .nav-right {
@@ -97,9 +111,13 @@ nav {
 
 /* home button bild (SigmaSpin)*/
 #SigmaSpin img {
-    width: 90px;
-    height: 67px;
+    width: 130px;
     cursor: pointer;
+    
+    position: absolute;
+    top: 12px;      /* geht nach oben aus dem Rahmen raus */
+    left: 30px;      /* nach rechts verschieben (anpassen wie du willst) */
+    z-index: 10;
 }
 
 /* ================= TOAST ALERT ================= */
