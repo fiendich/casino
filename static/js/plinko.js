@@ -371,74 +371,74 @@ $(document).ready(function() {
 
     // TEST FUNCTION - Call this from console: testDistribution()
     window.testDistribution = function(testBallCount = 1000, testBetAmount = 1) {
-    console.log(`🚀 Starting ${testBallCount} ball test on ${currentRisk} risk...`);
-    console.log(`💰 Theoretical Bet: $${testBetAmount} per ball`);
-    
-    // Percentages for 16 rows
-    const idealDistribution = [0.002, 0.024, 0.183, 0.854, 2.777, 6.665, 12.219, 17.456, 19.638, 17.456, 12.219, 6.665, 2.777, 0.854, 0.183, 0.024, 0.002];
-    const testMultipliersCount = new Array(17).fill(0);
-    
-    let testBallsFinished = 0;
-    let totalBet = 0;
-    let totalWon = 0;
-    
-    // Store original to restore later
-    const originalPayout = payout;
+        console.log(`🚀 Starting ${testBallCount} ball test on ${currentRisk} risk...`);
+        console.log(`💰 Theoretical Bet: $${testBetAmount} per ball`);
+        
+        // Percentages for 16 rows
+        const idealDistribution = [0.002, 0.024, 0.183, 0.854, 2.777, 6.665, 12.219, 17.456, 19.638, 17.456, 12.219, 6.665, 2.777, 0.854, 0.183, 0.024, 0.002];
+        const testMultipliersCount = new Array(17).fill(0);
+        
+        let testBallsFinished = 0;
+        let totalBet = 0;
+        let totalWon = 0;
+        
+        // Store original to restore later
+        const originalPayout = payout;
 
-    // OVERRIDE: This replaces the real payout logic temporarily
-    payout = function(ball) {
-        const slotIndex = getSlotIndex(ball.x);
-        const activeMultipliers = multipliers[currentRisk];
-        const multiplier = activeMultipliers[slotIndex];
-        
-        // Track stats locally
-        testMultipliersCount[slotIndex]++;
-        testBallsFinished++;
-        
-        const winAmount = ball.bet * multiplier;
-        totalBet += ball.bet;
-        totalWon += winAmount;
-        
-        // When the last ball hits, show results and clean up
-        if (testBallsFinished === testBallCount) {
-            finalizeTest();
+        // OVERRIDE: This replaces the real payout logic temporarily
+        payout = function(ball) {
+            const slotIndex = getSlotIndex(ball.x);
+            const activeMultipliers = multipliers[currentRisk];
+            const multiplier = activeMultipliers[slotIndex];
+            
+            // Track stats locally
+            testMultipliersCount[slotIndex]++;
+            testBallsFinished++;
+            
+            const winAmount = ball.bet * multiplier;
+            totalBet += ball.bet;
+            totalWon += winAmount;
+            
+            // When the last ball hits, show results and clean up
+            if (testBallsFinished === testBallCount) {
+                finalizeTest();
+            }
+
+            // NOTE: originalPayout(ball) is NOT called here. 
+            // No API calls, no toast messages, no balance changes.
+        };
+
+        function finalizeTest() {
+            payout = originalPayout; // Restore real payout functionality
+            
+            console.log(`\n===== DISTRIBUTION COMPARISON (${testBallCount} BALLS) =====`);
+            console.log("Slot | Actual % | Ideal % | Count | Expected");
+            console.log("-----|----------|---------|-------|---------");
+            for (let i = 0; i < 17; i++) {
+                const actualPerc = (testMultipliersCount[i] / testBallCount * 100).toFixed(2);
+                const expectedCount = Math.round((idealDistribution[i] / 100) * testBallCount);
+                console.log(
+                    `${i.toString().padStart(3)}  | ` +
+                    `${actualPerc.padStart(7)}% | ` +
+                    `${idealDistribution[i].toFixed(3).padStart(7)}% | ` +
+                    `${testMultipliersCount[i].toString().padStart(5)} | ` +
+                    `${expectedCount.toString().padStart(7)}`
+                );
+            }
+            
+            const rtp = (totalWon / totalBet * 100).toFixed(2);
+            console.log(`\n=== FINAL STATS (OFFLINE TEST) ===`);
+            console.log(`Total Theoretical Bet: $${totalBet.toFixed(2)}`);
+            console.log(`Total Theoretical Won: $${totalWon.toFixed(2)}`);
+            console.log(`Observed RTP: ${rtp}%`);
+            console.log(`==================================\n`);
         }
 
-        // NOTE: originalPayout(ball) is NOT called here. 
-        // No API calls, no toast messages, no balance changes.
-    };
-
-    function finalizeTest() {
-        payout = originalPayout; // Restore real payout functionality
-        
-        console.log(`\n===== DISTRIBUTION COMPARISON (${testBallCount} BALLS) =====`);
-        console.log("Slot | Actual % | Ideal % | Count | Expected");
-        console.log("-----|----------|---------|-------|---------");
-        for (let i = 0; i < 17; i++) {
-            const actualPerc = (testMultipliersCount[i] / testBallCount * 100).toFixed(2);
-            const expectedCount = Math.round((idealDistribution[i] / 100) * testBallCount);
-            console.log(
-                `${i.toString().padStart(3)}  | ` +
-                `${actualPerc.padStart(7)}% | ` +
-                `${idealDistribution[i].toFixed(3).padStart(7)}% | ` +
-                `${testMultipliersCount[i].toString().padStart(5)} | ` +
-                `${expectedCount.toString().padStart(7)}`
-            );
-        }
-        
-        const rtp = (totalWon / totalBet * 100).toFixed(2);
-        console.log(`\n=== FINAL STATS (OFFLINE TEST) ===`);
-        console.log(`Total Theoretical Bet: $${totalBet.toFixed(2)}`);
-        console.log(`Total Theoretical Won: $${totalWon.toFixed(2)}`);
-        console.log(`Observed RTP: ${rtp}%`);
-        console.log(`==================================\n`);
-    }
-
-        // MASS DROP
-        for (let i = 0; i < testBallCount; i++) {
-            createBall(testBetAmount); 
-        }
-    };
+            // MASS DROP
+            for (let i = 0; i < testBallCount; i++) {
+                createBall(testBetAmount); 
+            }
+        };
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
