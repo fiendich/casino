@@ -487,11 +487,11 @@ $(document).ready(function() {
             console.log(`==================================\n`);
         }
 
-        // MASS DROP
-        for (let i = 0; i < testBallCount; i++) {
-            createBall(testBetAmount); 
-        }
-    };
+            // MASS DROP
+            for (let i = 0; i < testBallCount; i++) {
+                createBall(testBetAmount); 
+            }
+        };
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
