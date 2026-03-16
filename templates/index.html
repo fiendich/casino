@@ -5,38 +5,30 @@
 <div class="index-wrapper">
     <div class="header">
         <h1>Welcome to the Casino</h1>
-        <p class="balance">Balance: ${{ balance }}</p>
+            <p class="balance">
+                {% if session.get("user_id") -%}
+                    ${%- set val = balance|float -%}
+                    {%- if val == val|int -%}
+                        {{ val|int }}
+                    {%- else -%}
+                        {{ "%.2f"|format(val) }}
+                    {%- endif -%}
+                {%- endif %}
+            </p>
     </div>
+    
 
     <div class="game-grid">
         <a href="/blackjack" class="game-card" id="card-blackjack">
-            <div class="card-img">
-                <div class="card-icon">♠</div>
-            </div>
-            <div class="card-body">
-                <h2>Blackjack</h2>
-                <p>Beat the dealer to 21</p>
-            </div>
+            <img src="../static/images/logo/blackjack.png">
         </a>
 
         <a href="/roulette" class="game-card" id="card-roulette">
-            <div class="card-img">
-                <div class="card-icon">◉</div>
-            </div>
-            <div class="card-body">
-                <h2>Roulette</h2>
-                <p>Spin the wheel of fortune</p>
-            </div>
+            <img src="../static/images/logo/roulette.png">
         </a>
 
         <a href="/plinko" class="game-card" id="card-plinko">
-            <div class="card-img">
-                <div class="card-icon">◎</div>
-            </div>
-            <div class="card-body">
-                <h2>Plinko</h2>
-                <p>Drop and win big</p>
-            </div>
+            <img src="../static/images/logo/Plinko.png">
         </a>
     </div>
 </div>

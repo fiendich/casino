@@ -63,7 +63,7 @@ $(document).ready(function(){
   let deck = [];
   let doubled = false;
 
-  $("#balance").text("Balance: " + balance + "$");
+  $("#balance").text("Balance: " + balance.toFixed(2) + "$");
   $("#buttons").hide();
   $("#currentBetContainer").hide();
 
@@ -196,7 +196,6 @@ $(document).ready(function(){
   function resetUI() {
     $("#dealerValue").text("-");
     $("#playerValue").text("-");
-    $("#balance").text("Balance: " + balance + "$");
     $("#dealerHand .card, #playerHand .card").removeClass("winner-border tie");
     $("#dealerValue, #playerValue").removeClass("winner-value winner-animation tie-value");
   }
@@ -207,6 +206,7 @@ $(document).ready(function(){
     dealerCardCount = 0;
     playerCardCount = 0;
     canHit = false;
+    doubled = false;
     
     resetUI();
     
@@ -243,12 +243,12 @@ async function placeBet() {
         $("#inputHalf, #inputDouble, #inputMax, #placeBetBtn").off("click");
         
         $("#inputHalf").on("click", function() {
-          let currentVal = parseInt($("#bet").val()) || 0;
+          let currentVal = parseFloat($("#bet").val()) || 0;
           $("#bet").val(Math.floor(currentVal / 2));
         });
 
         $("#inputDouble").on("click", function() {
-          let currentVal = parseInt($("#bet").val()) || 0;
+          let currentVal = parseFloat($("#bet").val()) || 0;
           let newVal = Math.min(currentVal * 2, balance);
           $("#bet").val(newVal);
         });
@@ -258,7 +258,7 @@ async function placeBet() {
         });
         
         $("#placeBetBtn").off("click").on("click", async function () {
-            bet = parseInt($("#bet").val());
+            bet = parseFloat($("#bet").val());
             
             if (isNaN(bet) || bet <= 0) {
                 showToast("Enter a valid bet!");
@@ -279,7 +279,6 @@ async function placeBet() {
             $("#buttons").show();
             $("#currentBetContainer").show();
             $("#currentBet").text(currentBet + "$");
-            $("#balance").text("Balance: " + balance + "$");
             
             resolve();
         });
@@ -351,8 +350,6 @@ async function placeBet() {
             break;
         }
 
-    
-    $("#balance").text("Balance: " + balance + "$");
     $("#currentBet").text("")
   }
 

@@ -218,20 +218,28 @@ $(document).ready(function() {
         balls.forEach(ball => {
             const ballSize = boardDimensions.pegRadius;
             
-            ctx.fillStyle = (currentRisk !== "rain") ? '#E46B6F' : "#699CC4";
+            ctx.fillStyle = (currentRisk !== "rain") ? '#E46B6F' : (ball.hasMultiplier) ? "#8f7f2cff" : "#699CC4";
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ballSize * 2.5, 0, Math.PI * 2);
             ctx.fill();
             
-            ctx.fillStyle = (currentRisk !== "rain") ? '#C34444' : "#699CC4";
+            ctx.fillStyle = (currentRisk !== "rain") ? '#C34444' : (ball.hasMultiplier) ? "#8f7f2cff" : "#699CC4";
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ballSize * 1.5, 0, Math.PI * 2);
             ctx.fill();
             
-            ctx.fillStyle = (currentRisk !== "rain") ? '#FF6569' : '#7CB1D2';
+            ctx.fillStyle = (currentRisk !== "rain") ? '#FF6569' : (ball.hasMultiplier) ? '#dcad3eff' : '#7CB1D2';
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ballSize, 0, Math.PI * 2);
             ctx.fill();
+
+            if (ball.hasMultiplier) {
+                ctx.fillStyle = 'white';
+                ctx.font = `bold ${ballSize * 3.3}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(`${ball.multiplier}`, ball.x, ball.y+1);
+            }
         });
     }
 
@@ -248,13 +256,16 @@ $(document).ready(function() {
     function updateBalls() {
         applyGravity();
         dropBalls();
+        
+        const newBalls = [];
         balls = balls.filter(ball => {
             if (ball.y > boardDimensions.slotY) {
-                payout(ball);
+                payout(ball, newBalls);
                 return false;
-            } 
+            }
             return true;
         });
+        balls.push(...newBalls);
     }
     
     function applyGravity() {
@@ -300,29 +311,64 @@ $(document).ready(function() {
             
             ball.x += nx * (overlap + 0.1);
             ball.y += ny * (overlap + 0.1);
-            
-            let xMultiplyer = (Math.abs(nx) > 0.4) ? 1.5 : 4
 
             ball.vx = nx * 2.2 + (Math.random() - 0.5) * 0.5; 
             ball.vy = -Math.abs(ball.vy) * BOUNCE_DAMPING;
         }
     }
 
-    function payout(ball) {
+    function getGamblingMultiplier(min = 2, max = 100, gravity = 8) {
+        let r = Math.random(); 
+        let skewed = Math.pow(r, gravity);
+        let result = skewed * (max - min) + min;
+        return Math.round(result);
+        }
+    function testMultipliers(min, max, gravity) {
+        let arr = [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+        ]
+
+        for (let i = 0; i < 10000; i++) {
+            arr[getGamblingMultiplier(min, max, gravity)] += 1;
+        }
+
+        for (let i = 0; i < 100; i++) {
+            arr[i] = parseFloat(arr[i] / 100).toFixed(2);    
+        }
+
+        console.log(arr)
+    }
+
+    function payout(ball, newBalls = balls) {
         const slotIndex = getSlotIndex(ball.x);
         const activeMultipliers = multipliers[currentRisk];
-        const multiplier = activeMultipliers[slotIndex];
-        const winAmount = Math.floor(ball.bet * multiplier * ball.multiplier);
+        let multiplier = activeMultipliers[slotIndex];
         
+        if (currentRisk === "rain" && multiplier == 0) {
+            multiplier = getGamblingMultiplier();
+            //showToast(multiplier);
+            createBall(ball.bet, ball.multiplier * multiplier, true, newBalls);
+            return;
+        }
+        const winAmount = Math.round(ball.bet * multiplier * ball.multiplier * 100) / 100;
+        //showToast(winAmount)
         if (typeof __webpack_require_internal_module__ === 'function') {
             __webpack_require_internal_module__(winAmount, "123qweasd").then(newBalance => {
                 balance = newBalance;
-                $("#balance").text("Balance: " + balance + "$");
             });
         }
         
-        if (multiplier >= 10) {
-            showToast(`🎉 BIG WIN! ${multiplier}x - Won $${winAmount}!`);
+        if (multiplier * ball.multiplier >= 10) {
+            showToast(`🎉 BIG WIN! ${multiplier * ball.multiplier}x - Won $${winAmount}!`);
         }
     }
 
@@ -339,19 +385,20 @@ $(document).ready(function() {
         return Math.hypot(x2-x1, y2-y1)
     }
 
-    function createBall(betAmount) {
+    function createBall(betAmount, multiplier = 1, hasMultiplier = false, targetArray = balls) {
         let randomOffset = (Math.random() * 2 - 1) * boardDimensions.spacing;
         const ball = {
             id: nextBallId++,
-            x: boardDimensions.width / 2 + randomOffset, 
+            x: boardDimensions.width / 2 + randomOffset,
             y: boardDimensions.topMargin - 35,
             vx: 0,
             vy: 0,
             bet: betAmount,
-            multiplier: 1,
+            multiplier: multiplier,
+            hasMultiplier: hasMultiplier
         };
         
-        balls.push(ball);
+        targetArray.push(ball);
     }
 
     function roundRect(ctx, x, y, width, height, radius) {
@@ -379,33 +426,36 @@ $(document).ready(function() {
         const testMultipliersCount = new Array(17).fill(0);
         
         let testBallsFinished = 0;
-        let totalBet = 0;
+        let totalBet = testBallCount * testBetAmount;
         let totalWon = 0;
+        let goldenBallsCreated = 0;
         
         // Store original to restore later
         const originalPayout = payout;
 
         // OVERRIDE: This replaces the real payout logic temporarily
-        payout = function(ball) {
+        payout = function(ball, newBalls = balls) {  // accept newBalls
             const slotIndex = getSlotIndex(ball.x);
             const activeMultipliers = multipliers[currentRisk];
-            const multiplier = activeMultipliers[slotIndex];
+            let multiplier = activeMultipliers[slotIndex];
             
-            // Track stats locally
+            if (currentRisk === "rain" && multiplier == 0) {
+                multiplier = getGamblingMultiplier();
+                //showToast(multiplier);
+                createBall(ball.bet, ball.multiplier * multiplier, true, newBalls);  // pass it through
+                goldenBallsCreated++;
+                return;
+            }
+            
             testMultipliersCount[slotIndex]++;
             testBallsFinished++;
             
-            const winAmount = ball.bet * multiplier;
-            totalBet += ball.bet;
+            const winAmount = ball.bet * multiplier * ball.multiplier;
             totalWon += winAmount;
             
-            // When the last ball hits, show results and clean up
             if (testBallsFinished === testBallCount) {
                 finalizeTest();
             }
-
-            // NOTE: originalPayout(ball) is NOT called here. 
-            // No API calls, no toast messages, no balance changes.
         };
 
         function finalizeTest() {
@@ -431,6 +481,9 @@ $(document).ready(function() {
             console.log(`Total Theoretical Bet: $${totalBet.toFixed(2)}`);
             console.log(`Total Theoretical Won: $${totalWon.toFixed(2)}`);
             console.log(`Observed RTP: ${rtp}%`);
+            if (currentRisk === "rain") {
+                console.log(`Golden Balls Created: ${goldenBallsCreated}`);
+            }
             console.log(`==================================\n`);
         }
 
@@ -446,17 +499,17 @@ $(document).ready(function() {
     // Start game loop
     gameLoop();
     
-    $("#balance").text("Balance: " + balance + "$");
+    $("#balance").text("Balance: " + balance.toFixed(2) + "$");
 
     $("#inputHalf, #inputDouble, #inputMax, #placeBetBtn").off("click");
         
     $("#inputHalf").on("click", function() {
-        let currentVal = parseInt($("#bet").val()) || 0;
-        $("#bet").val(Math.floor(currentVal / 2));
+        let currentVal = parseFloat($("#bet").val()) / 2 || 0;
+        $("#bet").val(currentVal.toFixed(2));
     });
 
     $("#inputDouble").on("click", function() {
-        let currentVal = parseInt($("#bet").val()) || 0;
+        let currentVal = parseFloat($("#bet").val()) || 0;
         let newVal = Math.min(currentVal * 2, balance);
         $("#bet").val(newVal);
     });
@@ -466,7 +519,7 @@ $(document).ready(function() {
     });
 
     $("#dropBtn").off("click").on("click", async function () {
-        bet = parseInt($("#bet").val());
+        bet = parseFloat($("#bet").val());
         
         if (isNaN(bet) || bet <= 0) {
             showToast("Enter a valid bet!");
@@ -481,7 +534,6 @@ $(document).ready(function() {
             balance = await __webpack_require_internal_module__(-bet, "123qweasd");
         }
 
-        $("#balance").text("Balance: " + balance + "$");
         createBall(bet);
     });
 });

@@ -5,9 +5,16 @@
 
 <div class="bg"></div>
 
-{% if session.get("user_id") %}
-<span id="balance">Balance: {{ balance }}</span>
-{% endif %}
+<span id="balance"></span>
+    {% if session.get("user_id") -%}
+        ${%- set val = balance|float -%}
+        {%- if val == val|int -%}
+            {{ val|int }}
+        {%- else -%}
+            {{ "%.2f"|format(val) }}
+        {%- endif -%}
+    {%- endif %}
+</span>
 
 <div id="gameArea">
     <div id="dealerHand"></div>

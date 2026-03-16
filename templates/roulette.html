@@ -6,10 +6,17 @@
 
     <!-- Left Panel für Bets -->
     <div id="left-panel">
-        {% if session.get("user_id") %}
-        <div id="balance">Balance: </div>
-        {% endif %}
-    <div id="inputContainer">
+       <div id="balance">
+       {% if session.get("user_id") -%}
+          ${%- set val = balance|float -%}
+          {%- if val == val|int -%}
+              {{ val|int }}
+          {%- else -%}
+              {{ "%.2f"|format(val) }}
+          {%- endif -%}
+      {%- endif %}
+      </div>
+      <div id="inputContainer">
             <button id="inputHalf">1/2</button>
             <button id="inputDouble">2x</button>
             <button id="inputMax">Max</button>

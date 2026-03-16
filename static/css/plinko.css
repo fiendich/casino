@@ -1,6 +1,6 @@
 body {
     margin: 0; 
-    background: #0E1328;
+    background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url('../images/logo/background_casino.png');
     font-family: Arial, sans-serif; 
 }
 
@@ -10,6 +10,7 @@ p {
 }
 
 #gameArea {
+    gap: 20px;
     margin-top: 40px;
     width: 72%;
     height: 88%;
@@ -20,6 +21,8 @@ p {
 }
 
 #btnContainer {
+    border-radius: 3%;
+    background: rgb(14, 19, 40, 0.7);
     padding: 2%;
     width: 29%;
     display: block;
@@ -36,6 +39,8 @@ p {
 }
 
 canvas {
+    background: rgb(14, 19, 40, 0.7);
+    border-radius: 3%;
     width: 773px;
     height: 680px;
     display: block;

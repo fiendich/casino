@@ -14,7 +14,7 @@ html, body {
     left: 0;
     width: 100%;
     height: calc(100% - 84px);
-    background-image: url("../images/blackjack/background.jpg");
+    background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url('../images/logo/background_casino.png');
     background-size: cover;
     background-position: center;
     z-index: 0;
