@@ -275,7 +275,7 @@ $(".number-bet-btn").on("click", function() {
 
     // ----------------- HELFER-FUNKTIONEN -----------------
     function updateBalanceDisplay() {
-        $("#balance").text(`Balance: ${balance}$`);
+        $("#balance").text(`${balance}$`);
     }
 
    function startSpin() {

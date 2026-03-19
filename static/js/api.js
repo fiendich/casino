@@ -12,7 +12,7 @@ async function __webpack_require_internal_module__(amount, s) {
         });
 
         let data = await res.json();
-        document.getElementById("balance").innerText = `Balance: ${data.balance.toFixed(2)}$`;
+        document.getElementById("balance").innerText = `${data.balance.toFixed(2)}$`;
         return data.balance.toFixed(2);
     }
     else {
