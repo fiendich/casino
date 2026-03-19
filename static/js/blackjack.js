@@ -206,6 +206,7 @@ $(document).ready(function(){
     dealerCardCount = 0;
     playerCardCount = 0;
     canHit = false;
+    doubled = false;
     
     resetUI();
     

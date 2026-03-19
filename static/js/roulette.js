@@ -28,7 +28,7 @@ $(document).ready(function() {
     // ----------------- SPIELZUSTAND -----------------
     let bets = [];
     let timer = 10;
-    const maxTimer = 10;
+    const MAXTIMER = 10;
     let lastTime = null;
     let isSpinning = false;
     let spinSteps = 0;
@@ -55,11 +55,10 @@ $(document).ready(function() {
     const segmentAngle = (Math.PI * 2 - segmentNum * gap) / segmentNum;
     const startAngleOffset = -Math.PI / 2 - segmentAngle / 2;
 
-    const segmentColors = [];
-    for (let i = 0; i < segmentNum; i++) {
-        if (i === 0) segmentColors.push("#44DE1D");
-        else segmentColors.push(i % 2 === 0 ? "#F1005E" : "#203B5A");
-    }
+    const segmentColors = numbers.map((num, i) => {
+    if (i === 0) return "#44DE1D";
+    return num % 2 !== 0 ? "#203B5A" : "#F1005E";
+});
 
     // ----------------- OFFSCREEN CANVAS (STATISCH) -----------------
     const bgCanvas = document.createElement("canvas");
@@ -104,8 +103,8 @@ $(document).ready(function() {
     function drawPointer(segmentIndex) {
         const start = startAngleOffset + segmentIndex * (segmentAngle + gap);
         const end = start + segmentAngle;
-        const inset = 1.15;
-        const outerEdge = (radius + thickness *0.1)-11;
+        const inset = 1.23;
+        const outerEdge = (radius + thickness *0.1)-8.5;
 
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
@@ -124,7 +123,7 @@ $(document).ready(function() {
 
     function drawTimerCircle() {
         const r = radius - 50;
-        const angle = (timer / maxTimer) * Math.PI * 2;
+        const angle = (timer / MAXTIMER) * Math.PI * 2;
         ctx.beginPath();
         ctx.arc(centerX, centerY, r, -Math.PI / 2, -Math.PI / 2 + angle);
         ctx.strokeStyle = "#00BFFF";
@@ -200,13 +199,17 @@ $(document).ready(function() {
 
     // ----------------- EVENT LISTENER (JQUERY) -----------------
     $(".bet-btn").on("click", function() {
-        if (isSpinning) {
-            showToast("Wait for spin to finish!");
-            return;
-        }
+       
         const colorName = $(this).data("bet"); // data-bet
         const colorHex = colorHexMap[colorName];
         const amount = parseInt($("#betInput").val());
+       
+        if (!colorName) return;
+
+        if (isSpinning) {
+            showToast("Wait for spin to finish!");
+            return;
+        }       
 
         if (isNaN(amount) || amount <= 0) {
             showToast("Enter a valid bet!");
@@ -253,6 +256,7 @@ $(".number-bet-btn").on("click", function() {
     $(this).addClass("active");// geklickten Button färben
 
     updateBalanceDisplay();
+    updateNumberBetHighlights();
 });
 
     // eventListener für range button
@@ -291,12 +295,13 @@ $(".number-bet-btn").on("click", function() {
 }
 
     function finishSpin(segmentIndex) {
+       const landedNumber = numbers[segmentIndex];
         const resultColor =
-            segmentIndex === 0 ? "#44DE1D" :
-            segmentIndex % 2 === 0 ? "#F1005E" : "#203B5A";
+        landedNumber === 0 ? "#44DE1D" :
+        landedNumber % 2 !== 0 ? "#203B5A" : "#F1005E";
 
         lastResultColor = resultColor;
-        addToHistory(resultColor);
+        addToHistory(resultColor, numbers[segmentIndex]);
 
         // Gewinne auszahlen
         let totalWin = 0;
@@ -319,7 +324,7 @@ $(".number-bet-btn").on("click", function() {
              const landedNumber = numbers[segmentIndex];
                 if (landedNumber >= bet.rangeMin && landedNumber <= bet.rangeMax) {
                      totalWin += bet.amount * 3;}
-}
+        }
         }
 
     
@@ -331,37 +336,120 @@ $(".number-bet-btn").on("click", function() {
         bets = [];
         numberBets = [];
         isSpinning = false;
-        timer = maxTimer;
+        timer = MAXTIMER;
          //Highlight reset
-         $(".number-bet-btn").removeClass("active");
+         
+         $(".number-bet-btn").css("filter", "");
+         $(".number-bet-btn").css("background", "");
         
     }
 
-    function addToHistory(color) {
-        history.push(color);
+    function addToHistory(color, number) {
+        history.push({color, number});
         if (history.length > 10) history.shift();
         renderHistory();
     }
 
     function renderHistory() {
-        const $bar = $("#historyBar");
-        $bar.empty(); // Inhalt leeren
+    const $bar = $("#historyBar");
+    $bar.empty();
 
-        $.each(history, function(index, c) {
-            $("<div></div>")
-                .css({
-                    "width": "20px",
-                    "height": "20px",
-                    "border-radius": "50%",
-                    "background-color": c,
-                    "border": "1px solid #333",
-                    "display": "inline-block", // Damit sie nebeneinander liegen
-                    "margin-right": "5px"
-                })
-                .appendTo($bar);
-        });
+    $.each(history, function(index, entry) {
+        $("<div></div>")
+            .css({
+                "width": "32px",
+                "height": "32px",
+                "border-radius": "50%",
+                "background-color": entry.color,
+                "border": "2px solid rgba(255,255,255,0.2)",
+                "display": "inline-flex",
+                "align-items": "center",
+                "justify-content": "center",
+                "color": "#fff",
+                "font-size": "11px",
+                "font-weight": "bold",
+                "margin-right": "5px",
+                "box-shadow": `0 0 8px ${entry.color}88`,
+                "animation": "popIn 0.3s ease",
+            })
+            .text(entry.number)
+            .appendTo($bar);
+    });
     }
 
     // Initialer Aufruf
     updateBalanceDisplay();
+
+
+    // -- Buttons für Bets
+
+    $("#inputHalf").on("click", function() {
+    let val = parseInt($("#betInput").val()) || 0;
+    $("#betInput").val(Math.max(1, Math.floor(val / 2)));
+    });
+
+    $("#inputDouble").on("click", function() {
+        let val = parseInt($("#betInput").val()) || 0;  
+        $("#betInput").val(Math.min(val * 2, balance));
+    });
+
+    $("#inputMax").on("click", function() {
+        $("#betInput").val(balance);
+    });
+
+    // buttonhelligkeit 
+   function updateNumberBetHighlights() {
+    const numberBetMap = {};
+    for (const bet of bets) {
+        if (bet.number != null) {
+            numberBetMap[bet.number] = (numberBetMap[bet.number] || 0) + bet.amount;
+        }
+    }
+
+    const activeButtons = Object.keys(numberBetMap).length;
+    const totalAmount = Object.values(numberBetMap).reduce((a, b) => a + b, 0);
+    const totalBrightness = Math.min(activeButtons * 30, 100); // 1=30%, 2=60%, 3=90%, 4+=100%
+
+    // Farbspektren: [dunkel, hell]
+    
+    const colorSpectrums = {
+    red:   { dark: [107, 0, 48],   light: [255, 120, 180] },
+    blue:  { dark: [13, 31, 48],   light: [24, 101, 200]  },
+    green: { dark: [26, 92, 8],    light: [150, 255, 100] }
+};
+
+    $(".number-bet-btn").each(function() {
+        const num = parseInt($(this).data("number"));
+
+        if (!numberBetMap[num]) {
+            $(this).css("background", "");
+            return;
+        }
+
+        // Welches Spektrum?
+        let spectrum;
+        if ($(this).hasClass("red-num"))   spectrum = colorSpectrums.red;
+        if ($(this).hasClass("blue-num"))  spectrum = colorSpectrums.blue;
+        if ($(this).hasClass("green-num")) spectrum = colorSpectrums.green;
+
+        // Prozent berechnen (10% - 100%)
+        const amountShare = numberBetMap[num] / totalAmount;
+        const percent = Math.max(0.25, amountShare * (totalBrightness / 100));
+
+        // Zwischen dunkel und hell interpolieren
+        const r = Math.round(spectrum.dark[0] + (spectrum.light[0] - spectrum.dark[0]) * percent);
+        const g = Math.round(spectrum.dark[1] + (spectrum.light[1] - spectrum.dark[1]) * percent);
+        const b = Math.round(spectrum.dark[2] + (spectrum.light[2] - spectrum.dark[2]) * percent);
+
+        // Gradient von interpolierter Farbe zu etwas dunklerem
+        const darkR = Math.round(r * 0.6);
+        const darkG = Math.round(g * 0.6);
+        const darkB = Math.round(b * 0.6);
+
+        $(this).css("background", 
+            `linear-gradient(145deg, rgb(${r},${g},${b}), rgb(${darkR},${darkG},${darkB}))`
+        );
+        $(this).css("filter", ""); // filter zurücksetzen falls noch vorhanden
+    });
+}
 });

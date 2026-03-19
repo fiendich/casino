@@ -81,8 +81,10 @@
     overflow: hidden;
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     cursor: pointer;
-    border: 1px solid white;
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(0, 0, 0, 0.4);
+    
+    transition: all 0.3s ease;
 }
 .game-card img{
     max-width: 100%;
@@ -95,7 +97,10 @@
 .game-card:hover {
     transform: translateY(-6px);
     border-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+    border-color: white;
+    box-shadow: 
+        0px 2px 10px 15px rgba(255, 255, 255, 0.8),
+        0px 4px 20px 15px rgba(255, 255, 255, 0.6);
 }
 
 /* ================= CARD IMAGE PLACEHOLDER ================= */

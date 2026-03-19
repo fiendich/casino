@@ -5,7 +5,7 @@
     left: 0;
     width: 100%;
     height: calc(100% - 84px);
-    background-color: #07162A;
+    background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url('../images/logo/background_casino.png');
     background-size: cover;
     z-index: -1;
     background-position: center;
@@ -81,11 +81,42 @@ button {
     opacity: 0.95;
 
     background: linear-gradient(145deg, #2b2f66, #1a1d40);
-    box-shadow:
-        0 6px 15px rgba(0,0,0,0.6),
-        inset 0 0 0 rgba(255,255,255,0);
+   
+}
+#rangeBetPanel {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
 
-    transition: all 0.25s ease;
+#rangeBetPanel .bet-btn {
+    width: 85px;
+    height: 50px;
+    font-size: 11px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+}
+
+/* Jeder Button bekommt eine eigene Farbe im Spektrum */
+.range-bet-btn:nth-child(1) {
+    background: linear-gradient(145deg, #1A0A2E, #2D1250);
+    border: 1px solid #3D1870;
+    box-shadow: 0 0 8px rgba(80, 20, 140, 0.3);
+}
+
+.range-bet-btn:nth-child(2) {
+    background: linear-gradient(145deg, #3D1270, #5A1E9E);
+    border: 1px solid #6B24B8;
+    box-shadow: 0 0 8px rgba(120, 40, 200, 0.4);
+}
+
+.range-bet-btn:nth-child(3) {
+    background: linear-gradient(145deg, #6B24B8, #9B3FE0);
+    border: 1px solid #B050F0;
+    box-shadow: 0 0 10px rgba(180, 80, 240, 0.5);
 }
 
 /* Aktive Auswahl hervorheben */
@@ -125,25 +156,25 @@ canvas {
     cursor: not-allowed;
 }
 
-.number-bet-btn.green-num {
-    background: linear-gradient(145deg, #44DE1D, #1f6b0a);
-    border: 1px solid #44DE1D;
-    color: white;
-    box-shadow: 0 0 8px rgba(68, 222, 29, 0.3);
-}
-
 .number-bet-btn.red-num {
-    background: linear-gradient(145deg, #F1005E, #8B0035);
+    background: linear-gradient(145deg, #6B0030, #3D001C);
     border: 1px solid #F1005E;
     color: white;
     box-shadow: 0 0 8px rgba(241, 0, 94, 0.3);
 }
 
 .number-bet-btn.blue-num {
-    background: linear-gradient(145deg, #2E5F9E, #0d1f30);
-    border: 1px solid #2E5F9E;
+    background: linear-gradient(145deg, #0D1F30, #071018);
+    border: 1px solid #203B5A;
     color: white;
-    box-shadow: 0 0 8px rgba(46, 95, 158, 0.3);
+    box-shadow: 0 0 8px rgba(32, 59, 90, 0.3);
+}
+
+.number-bet-btn.green-num {
+    background: linear-gradient(145deg, #1A5C08, #0D2E04);
+    border: 1px solid #44DE1D;
+    color: white;
+    box-shadow: 0 0 8px rgba(68, 222, 29, 0.3);
 }
 /* History Bar über dem Canvas */
 #historyBar {
@@ -153,7 +184,7 @@ canvas {
     margin-bottom: 10px;
     position: absolute;
     top: 50px;
-    left: 60%;
+    left: 60.1379%;
     transform: translateX(-50%);
     z-index: 5;
 }
@@ -186,6 +217,77 @@ canvas {
     cursor: pointer;
 }
 
-.active {
-    background: #5660C9 !important;
+
+
+#inputContainer {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 45px;
+}
+
+#inputContainer input {
+    width: 100%;
+    height: 100%;
+    font-size: 18px;
+    background: #202849;
+    color: white;
+    border-radius: 8px;
+    border: 1px solid #222A49;
+    padding-left: 10%;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+
+#inputContainer input:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(0,118,219,0.5);
+}
+
+#inputContainer button {
+    position: absolute;
+    color: #636C8A;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #18203B;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    height: 70%;
+    width: 15%;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+#inputHalf  { left: 47%; }
+#inputDouble { left: 65%; }
+#inputMax   { left: 83%; }
+
+#dollar {
+    position: absolute;
+    color: #636C8A;
+    top: 50%;
+    left: 4%;
+    transform: translateY(-50%);
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Spin-Arrows entfernen */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+@keyframes popIn {
+    0%   { transform: scale(0); opacity: 0; }
+    70%  { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); }
 }
