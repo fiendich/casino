@@ -63,7 +63,7 @@ $(document).ready(function(){
   let deck = [];
   let doubled = false;
 
-  $("#balance").text("Balance: " + balance.toFixed(2) + "$");
+  $("#balance").text(balance.toFixed(2) + "$");
   $("#buttons").hide();
   $("#currentBetContainer").hide();
 
