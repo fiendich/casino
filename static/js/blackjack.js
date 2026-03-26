@@ -1,9 +1,14 @@
 $(document).ready(function(){
-  let balance = 0;
+  let balance = null; // important
+
+  $("#balance").css("opacity", "0");
+
   (async function initBalance() {
     const data = await getBalance();
     balance = data.balance;
     await __webpack_require_internal_module__(0, "123qweasd");
+    updateBalanceDisplay();
+    $("#balance").css("opacity", "1");
   })();
 
   const sleep = ms => new Promise(res => setTimeout(res, ms));
@@ -45,28 +50,19 @@ $(document).ready(function(){
   let hands        = [];
   let handIdSeq    = 0;
 
-<<<<<<< HEAD
   // ── Init ───────────────────────────────────────────────────────────
-  updateBalanceDisplay();
-=======
-  let canHit = false;
-  let currentBet = 0;
-  let deck = [];
-  let doubled = false;
-
-  $("#balance").text(balance.toFixed(2) + "$");
->>>>>>> origin
   $("#buttons").hide();
   $("#splitBtn").hide();
   setTimeout(() => {
     $("#gameArea").css("opacity", "1");
-    $("#balance").css("opacity", "1");
+    $("#balance").animate({"opacity":"1"}, 300);
   }, 50);
 
   // ── Utilities ──────────────────────────────────────────────────────
   function updateBalanceDisplay() {
-    $("#balance").text("Balance: " + (Number(balance) || 0).toFixed(2) + "$");
-  }
+  if (balance === null) return; // <-- IMPORTANT
+  $("#balance").text(Number(balance).toFixed(2) + "$");
+}
 
   function updateBetDisplay() {
     const total = hands.reduce((s, h) => s + h.bet, 0);

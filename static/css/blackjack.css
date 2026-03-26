@@ -23,18 +23,6 @@ html, body {
 /* ================= BALANCE & BET ================= */
 
 #balance {
-<<<<<<< HEAD
-    position: absolute;
-    display: flex;
-    left: 7%;
-    bottom: 14%;
-    font-size: 30px;
-    color: white;
-    font-weight: bold;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-=======
     font-size: 20px;
     color: #7a8ab5;
     margin: 0;
@@ -42,7 +30,6 @@ html, body {
     position: fixed; /* oder fixed, wenn es beim Scrollen sichtbar bleiben soll */
     top: 115px;
     right: 30px;
->>>>>>> origin
 }
 
 #currentBetContainer {
