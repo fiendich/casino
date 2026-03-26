@@ -29,13 +29,13 @@ p {
 }
 
 #balance {
-    position: absolute;
-    left: 240px;
-    top: 640px;
-    font-size: 30px;
-    color: white;
-    font-weight: bold;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    font-size: 20px;
+    color: #7a8ab5;
+    margin: 0;
+    font-weight: 600;
+    position: fixed; /* oder fixed, wenn es beim Scrollen sichtbar bleiben soll */
+    top: 115px;
+    right: 30px;
 }
 
 canvas {
