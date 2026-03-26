@@ -26,7 +26,7 @@ html, body {
     position: absolute;
     display: flex;
     left: 7%;
-    bottom: 10%;
+    bottom: 14%;
     font-size: 30px;
     color: white;
     font-weight: bold;
@@ -36,9 +36,10 @@ html, body {
 }
 
 #currentBetContainer {
+    z-index: -1;
     position: absolute;
     display: flex;
-    bottom: 23.5%;
+    bottom: 27.5%;
     width: 100vw;
     justify-content: center;
     align-items: center;
@@ -63,31 +64,102 @@ html, body {
     transition: opacity 0.3s ease;
 }
 
-#dealerHand,
-#playerHand {
+/* ================= DEALER HAND (static, unchanged) ================= */
+
+#dealerHand {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-#dealerHand {
     top: 7%;
 }
 
-#playerHand {
-    top: 57.5%;
+/* ================= HAND CONTAINERS ================= */
+
+.hand-container {
+    position: absolute;
+    top: 34%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    transition: left 0.3s ease, width 0.3s ease;
+}
+
+.hand-label {
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+    min-height: 18px;
+    margin-bottom: 6px;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    pointer-events: none;
+}
+
+.hand-label.label-active {
+    color: #00BFFF;
+    text-shadow: 0 0 10px rgba(0, 191, 255, 0.65);
+}
+
+.hand-cards {
+    position: relative;
+    width: 100%;
+    height: 130px;
+}
+
+.hand-value {
+    margin-bottom: 12px;
+
+    width: 65px;
+    height: 50px;
+    border-radius: 6px;
+    outline: 7px solid #595E92;
+    background-color: #454E8A;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    scale: 0.5;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, outline-color 0.3s ease;
+}
+
+.hand-value.winner-value {
+    background-color: #34A873 !important;
+    outline-color: #34A873 !important;
+}
+
+.hand-value.tie-value {
+    background-color: #FCBF01 !important;
+    outline-color: #FCBF01 !important;
+}
+
+.hand-value.winner-animation {
+    animation: pulseValue 0.5s ease-in-out;
+}
+
+@keyframes pulseValue {
+    0%,  100% { scale: 0.5;  }
+    50%        { scale: 0.55; }
+}
+
+.hand-bet {
+    font-size: 22px;
+    margin-top: 6px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.55);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    letter-spacing: 0.5px;
+    pointer-events: none;
 }
 
 /* ================= CARDS ================= */
-
-.card-container {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
 
 .card {
     position: absolute;
@@ -98,14 +170,31 @@ html, body {
     border: 2px solid #333;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease,
+                border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* ================= HAND VALUES ================= */
+.card.active-hand {
+    border-color: #00BFFF;
+    box-shadow: 0 0 14px rgba(0, 191, 255, 0.75), 0 4px 12px rgba(0, 0, 0, 0.6);
+}
 
-#dealerValue,
-#playerValue {
+.card.winner-border {
+    border: 3px solid #34A873 !important;
+}
+
+.card.tie {
+    border: 3px solid #D2A916 !important;
+}
+
+/* ================= DEALER VALUE ================= */
+
+#dealerValue {
     position: absolute;
+    left: 49%;
+    top: 18%;
+    transform: translate(-50%, -50%);
+
     width: 65px;
     height: 50px;
     border-radius: 6px;
@@ -122,16 +211,23 @@ html, body {
     transition: all 0.3s ease;
 }
 
-#dealerValue {
-    left: 49%;
-    top: 18%;
-    transform: translate(-50%, -50%);
+#dealerValue.winner-value {
+    background-color: #34A873 !important;
+    outline-color: #34A873 !important;
 }
 
-#playerValue {
-    left: 49%;
-    bottom: 50%;
-    transform: translate(-50%, -50%);
+#dealerValue.tie-value {
+    background-color: #FCBF01 !important;
+    outline-color: #FCBF01 !important;
+}
+
+#dealerValue.winner-animation {
+    animation: pulseDealerValue 0.5s ease-in-out;
+}
+
+@keyframes pulseDealerValue {
+    0%,  100% { transform: translate(-50%, -50%) scale(1);   }
+    50%        { transform: translate(-50%, -50%) scale(1.1); }
 }
 
 /* ================= BET INPUT ================= */
@@ -143,7 +239,7 @@ input::-webkit-inner-spin-button {
 }
 
 #dollar {
-    position: absolute; 
+    position: absolute;
     color: #636C8A;
     top: 56.5%;
     left: 6%;
@@ -161,12 +257,10 @@ input::-webkit-inner-spin-button {
 #betContainer {
     position: absolute;
     left: 50%;
-    bottom: 18%;
+    bottom: 22%;
     transform: translateX(-50%);
-
     height: 10%;
     width: 15%;
-
     gap: 10px;
     display: flex;
     text-align: center;
@@ -180,11 +274,9 @@ input::-webkit-inner-spin-button {
     font-size: 18px;
     background: #202849;
     color: white;
-
     border-radius: 8px;
     border: 1px solid #222A49;
     padding-left: 10%;
-
     font-weight: bold;
 }
 
@@ -196,7 +288,6 @@ input::-webkit-inner-spin-button {
 #placeBetBtn {
     width: 100%;
     height: 50%;
-
     font-size: 18px;
     border-radius: 10px;
     border: none;
@@ -221,17 +312,9 @@ input::-webkit-inner-spin-button {
     cursor: pointer;
 }
 
-#inputHalf {
-    left: 47%;
-}
-
-#inputDouble {
-    left: 65%;
-}
-
-#inputMax {
-    left: 83%;
-}
+#inputHalf  { left: 47%; }
+#inputDouble { left: 65%; }
+#inputMax   { left: 83%; }
 
 #placeBetBtn:hover {
     box-shadow: 1px 1px 15px rgba(255, 255, 255, 0.3);
@@ -242,7 +325,7 @@ input::-webkit-inner-spin-button {
 #buttons {
     position: absolute;
     width: 100vw;
-    bottom: 18%;
+    bottom: 22%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -261,89 +344,36 @@ input::-webkit-inner-spin-button {
     position: relative;
     overflow: hidden;
     opacity: 0.95;
-
     background: linear-gradient(145deg, #2b2f66, #1a1d40);
-    box-shadow:
-        0 6px 15px rgba(0,0,0,0.6),
-        inset 0 0 0 rgba(255,255,255,0);
-
+    box-shadow: 0 6px 15px rgba(0,0,0,0.6);
     transition: all 0.25s ease;
 }
 
+#buttons button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
 /* ===== HIT ===== */
-
-#hitBtn {
-    border: 2px solid #269640;
-    box-shadow:
-        0 0 10px rgba(52,206,87,0.35),
-        0 6px 15px rgba(0,0,0,0.6);
-}
-
-#hitBtn:hover {
-    border-color: #34CE57;
-}
+#hitBtn    { border: 2px solid #269640; box-shadow: 0 0 10px rgba(52,206,87,0.35), 0 6px 15px rgba(0,0,0,0.6); }
+#hitBtn:hover:not(:disabled)    { border-color: #34CE57; }
 
 /* ===== STAND ===== */
-
-#standBtn {
-    border: 2px solid #ba3f31;
-    box-shadow:
-        0 0 10px rgba(231,76,60,0.35),
-        0 6px 15px rgba(0,0,0,0.6);
-}
-
-#standBtn:hover {
-    border-color: #E74C3C;
-}
+#standBtn  { border: 2px solid #ba3f31; box-shadow: 0 0 10px rgba(231,76,60,0.35), 0 6px 15px rgba(0,0,0,0.6); }
+#standBtn:hover:not(:disabled)  { border-color: #E74C3C; }
 
 /* ===== DOUBLE ===== */
+#doubleBtn { border: 2px solid #0089b7; box-shadow: 0 0 12px rgba(0,191,255,0.45), 0 6px 15px rgba(0,0,0,0.6); }
+#doubleBtn:hover:not(:disabled) { border-color: #00BFFF; }
 
-#doubleBtn {
-    border: 2px solid #0089b7;
-    box-shadow:
-        0 0 12px rgba(0,191,255,0.45),
-        0 6px 15px rgba(0,0,0,0.6);
-}
+/* ===== SPLIT ===== */
+#splitBtn  { border: 2px solid #a07d1a; box-shadow: 0 0 12px rgba(255,196,0,0.40), 0 6px 15px rgba(0,0,0,0.6); }
+#splitBtn:hover:not(:disabled)  { border-color: #FFC400; }
 
-#doubleBtn:hover {
-    border-color: #00BFFF;
-}
-
-/* ===== BUTTON INTERACTION ===== */
-
-#buttons button:active {
+#buttons button:active:not(:disabled) {
     transform: translateY(1px) scale(0.98);
     box-shadow: 0 3px 8px rgba(0,0,0,0.5);
-}
-
-/* ================= WIN STATES ================= */
-
-.winner-border {
-    border: 3px solid #34A873 !important;
-}
-
-.winner-value {
-    background-color: #34A873 !important;
-    outline: #34A873 !important;
-}
-
-.tie {
-    border: 3px solid #D2A916 !important;
-}
-
-.tie-value {
-    background-color: #FCBF01 !important;
-    outline: #FCBF01 !important;
-}
-
-.winner-animation {
-    animation: pulse 0.5s ease-in-out;
-}
-
-@keyframes pulse {
-    0% { transform: translate(-50%, -50%) scale(1); }
-    50% { transform: translate(-50%, -50%) scale(1.1); }
-    100% { transform: translate(-50%, -50%) scale(1); }
 }
 
 /* ================= LOGIN TO PLAY BUTTON ================= */
@@ -364,4 +394,46 @@ input::-webkit-inner-spin-button {
 
 #loginToPlayBtn:hover {
     box-shadow: 1px 1px 15px rgba(255, 255, 255, 0.3);
+}
+
+/* ================= HAND BET RESULT ANIMATIONS ================= */
+
+.hand-bet.hand-bet-win {
+    animation: handBetWinAnim 2s ease-in-out forwards;
+}
+
+.hand-bet.hand-bet-loss {
+    animation: handBetLossAnim 1.4s ease-in-out forwards;
+}
+
+.hand-bet.hand-bet-tie {
+    animation: handBetTieAnim 1.5s ease-in-out forwards;
+}
+
+/* Win: scales up with green glow, holds at peak (JS swaps text here), scales back */
+@keyframes handBetWinAnim {
+    0%   { transform: scale(1);    color: rgba(255,255,255,0.55); text-shadow: none; }
+    30%  { transform: scale(1.3);  color: #34CE57; text-shadow: 0 0 18px rgba(52,206,87,0.9), 0 0 40px rgba(52,206,87,0.45); }
+    55%  { transform: scale(1.3);  color: #34CE57; text-shadow: 0 0 18px rgba(52,206,87,0.9), 0 0 40px rgba(52,206,87,0.45); }
+    100% { transform: scale(1);    color: #34CE57; text-shadow: 0 0 18px rgba(52,206,87,0.9), 0 0 40px rgba(52,206,87,0.45)}
+}
+
+/* Loss: flips crimson, shakes left-right */
+@keyframes handBetLossAnim {
+    0%   { color: rgba(255,255,255,0.55); transform: translateX(0);    }
+    10%  { color: #c0392b;                transform: translateX(-6px);  }
+    25%  { color: #c0392b;                transform: translateX(6px);   }
+    40%  { color: #c0392b;                transform: translateX(-3.5px);  }
+    55%  { color: #c0392b;                transform: translateX(3.5px);   }
+    70%  { color: #c0392b;                transform: translateX(-1px);  }
+    85%  { color: #c0392b;                transform: translateX(1px);   }
+    100% { color: #c0392b;                transform: translateX(0);     }
+}
+
+/* Tie: drifts up slightly, turns yellow */
+@keyframes handBetTieAnim {
+    0%   { transform: translateY(0px);   color: rgba(255,255,255,0.55); }
+    45%  { transform: translateY(-3px); color: #FCBF01; text-shadow: 0 0 10px rgba(252,191,1,0.7); }
+    75%  { transform: translateY(-3px); color: #FCBF01; text-shadow: 0 0 10px rgba(252,191,1,0.7); }
+    100% { transform: translateY(0px);   color: rgba(255,255,255,0.55); }
 }
