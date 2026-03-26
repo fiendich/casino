@@ -279,7 +279,7 @@ $(".number-bet-btn").on("click", function() {
 
     // ----------------- HELFER-FUNKTIONEN -----------------
     function updateBalanceDisplay() {
-        $("#balance").text(`Balance: ${balance.toFixed(2)}$`);
+        $("#balance").text(`${balance}$`);
     }
 
    function startSpin() {

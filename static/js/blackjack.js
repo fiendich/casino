@@ -45,8 +45,17 @@ $(document).ready(function(){
   let hands        = [];
   let handIdSeq    = 0;
 
+<<<<<<< HEAD
   // ── Init ───────────────────────────────────────────────────────────
   updateBalanceDisplay();
+=======
+  let canHit = false;
+  let currentBet = 0;
+  let deck = [];
+  let doubled = false;
+
+  $("#balance").text(balance.toFixed(2) + "$");
+>>>>>>> origin
   $("#buttons").hide();
   $("#splitBtn").hide();
   setTimeout(() => {

@@ -11,6 +11,17 @@
     background-position: center;
 }
 
+/* Balance*/
+#balance {
+    font-size: 20px;
+    color: #7a8ab5;
+    margin: 0;
+    font-weight: 600;
+    position: fixed; /* oder fixed, wenn es beim Scrollen sichtbar bleiben soll */
+    top: 115px;
+    right: 30px;
+}
+
 /* Game Area - contains everything, clips overflow */
 #gameArea {
     position: relative;
