@@ -33,17 +33,19 @@
 /* Left Panel */
 #left-panel {
     position: fixed;
-    top: 84px;
-    left: 0;
+    top: 135px;
+    left: 50px;
     width: 25vw;
-    height: calc(100vh - 84px);
-    background-color: #0B1C3D;
+    height: calc(100vh - 124px);
+    background-color: rgba(11, 28, 61, 0.3);
     padding: 20px;
     box-sizing: border-box;
     z-index: 2;
     display: flex;
+    border-radius: 3%;
     flex-direction: column;
     gap: 12px;
+    align-items: center;
 }
 
 #colorBetPanel {
@@ -61,7 +63,7 @@
     padding: 0;
     border: none;
 }
-.bet-btn[data-bet="red"]   { background: linear-gradient(145deg, #F1005E, #a0003e); }
+.bet-btn[data-bet="red"]   { background: linear-gradient(145deg, #B40000, #6B0000); }
 .bet-btn[data-bet="blue"]  { background: linear-gradient(145deg, #203B5A, #0d1f30); }
 .bet-btn[data-bet="green"] { background: linear-gradient(145deg, #44DE1D, #2a8c10); }
 
@@ -101,28 +103,10 @@ button {
 }
 
 /* Jeder Button bekommt eine eigene Farbe im Spektrum */
-.range-bet-btn:nth-child(1) {
-    background: linear-gradient(145deg, #1A0A2E, #2D1250);
-    border: 1px solid #3D1870;
-    box-shadow: 0 0 8px rgba(80, 20, 140, 0.3);
-}
-
-.range-bet-btn:nth-child(2) {
-    background: linear-gradient(145deg, #3D1270, #5A1E9E);
-    border: 1px solid #6B24B8;
-    box-shadow: 0 0 8px rgba(120, 40, 200, 0.4);
-}
-
-.range-bet-btn:nth-child(3) {
-    background: linear-gradient(145deg, #6B24B8, #9B3FE0);
-    border: 1px solid #B050F0;
-    box-shadow: 0 0 10px rgba(180, 80, 240, 0.5);
-}
-
-/* Aktive Auswahl hervorheben */
-.bet-btn.active {
-    outline: 3px solid #ffd700;
-    transform: scale(1.05);
+.range-bet-btn {
+    background: linear-gradient(145deg, #2C3E50, #1a252f);
+    border: 1px solid #2C3E50;
+    box-shadow: 0 0 8px rgba(44, 62, 80, 0.3);
 }
 
 /* Spin Container unter Canvas */
@@ -142,10 +126,11 @@ button {
 canvas {
     position: absolute;
     border: none;
+    border-radius: 3%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #0B1C3D;
+     background-color: rgba(11, 28, 61, 0.3);  /* war #0B1C3D, jetzt 60% opak */
     background-size: cover;
     background-position: center;
 }
@@ -157,21 +142,21 @@ canvas {
 }
 
 .number-bet-btn.red-num {
-    background: linear-gradient(145deg, #6B0030, #3D001C);
-    border: 1px solid #F1005E;
+    background: linear-gradient(145deg, #B40000, #6B0000);
+    border: 1px solid #B40000;
     color: white;
     box-shadow: 0 0 8px rgba(241, 0, 94, 0.3);
 }
 
 .number-bet-btn.blue-num {
-    background: linear-gradient(145deg, #0D1F30, #071018);
+    background: linear-gradient(145deg, #203B5A, #0d1f30);
     border: 1px solid #203B5A;
     color: white;
     box-shadow: 0 0 8px rgba(32, 59, 90, 0.3);
 }
 
 .number-bet-btn.green-num {
-    background: linear-gradient(145deg, #1A5C08, #0D2E04);
+    background: linear-gradient(145deg, #44DE1D, #1f6b0a);
     border: 1px solid #44DE1D;
     color: white;
     box-shadow: 0 0 8px rgba(68, 222, 29, 0.3);
@@ -207,6 +192,7 @@ canvas {
     display: grid;
     grid-template-columns: repeat(7, 40px); /* 3 Reihen à 7 Buttons */
     gap: 5px;
+    justify-content: center;
 }
 
 .number-bet-btn {
@@ -222,8 +208,9 @@ canvas {
 #inputContainer {
     position: relative;
     display: flex;
-    width: 100%;
+    width: 90%;
     height: 45px;
+    margin-top: 30px;
 }
 
 #inputContainer input {

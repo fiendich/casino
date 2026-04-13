@@ -4,7 +4,7 @@ $(document).ready(function() {
     
     (async function initBalance() {
         const data = await getBalance();
-        balance = data.balance;   // 👈 NUR ZAHL
+        balance = parseFloat(data.balance);   // 👈 NUR ZAHL
         updateBalanceDisplay();
     })();
 
@@ -20,7 +20,7 @@ $(document).ready(function() {
     const ctx = $canvas[0].getContext("2d");
 
     const colorHexMap = {
-        red: "#F1005E",
+        red: "#B40000",
         blue: "#203B5A",
         green: "#44DE1D"
     };
@@ -31,6 +31,7 @@ $(document).ready(function() {
     const MAXTIMER = 10;
     let lastTime = null;
     let isSpinning = false;
+    let isFinishing = false;
     let spinSteps = 0;
     let currentSegment = 0;
     let lastResultColor = null;
@@ -57,7 +58,7 @@ $(document).ready(function() {
 
     const segmentColors = numbers.map((num, i) => {
     if (i === 0) return "#44DE1D";
-    return num % 2 !== 0 ? "#203B5A" : "#F1005E";
+    return num % 2 !== 0 ? "#203B5A" : "#B40000";
 });
 
     // ----------------- OFFSCREEN CANVAS (STATISCH) -----------------
@@ -161,7 +162,7 @@ $(document).ready(function() {
     }
 
     function updateSpin(timestamp) {
-    if (!isSpinning) return;
+    if (!isSpinning || isFinishing) return;
 
     const elapsed = timestamp - spinStartTime;
     let progress = elapsed / spinDuration;
@@ -202,7 +203,7 @@ $(document).ready(function() {
        
         const colorName = $(this).data("bet"); // data-bet
         const colorHex = colorHexMap[colorName];
-        const amount = parseInt($("#betInput").val());
+        const amount = parseFloat($("#betInput").val());
        
         if (!colorName) return;
 
@@ -225,6 +226,7 @@ $(document).ready(function() {
         __webpack_require_internal_module__(-amount,"123qweasd");
         bets.push({ color: colorHex, amount });
         updateBalanceDisplay();
+        updateColorBetHighlights();
     });
 
    // ----------------- EVENT LISTENER FÜR ZAHLEN -----------------
@@ -235,7 +237,7 @@ $(".number-bet-btn").on("click", function() {
     }
 
     const number = $(this).data("number");
-    const amount = parseInt($("#betInput").val());
+    const amount = parseFloat($("#betInput").val());
 
     if (isNaN(amount) || amount <= 0) {
         showToast("Enter a valid bet!");
@@ -266,7 +268,7 @@ $(".number-bet-btn").on("click", function() {
 
     const min = parseInt($(this).data("range-min"));
     const max = parseInt($(this).data("range-max"));
-    const amount = parseInt($("#betInput").val());
+    const amount = parseFloat($("#betInput").val());
 
     if (isNaN(amount) || amount <= 0) { showToast("Enter a valid bet!"); return; }
     if (amount > balance) { showToast("Not enough balance!"); return; }
@@ -275,11 +277,13 @@ $(".number-bet-btn").on("click", function() {
     __webpack_require_internal_module__(-amount, "123qweasd");
     bets.push({ rangeMin: min, rangeMax: max, amount });
     updateBalanceDisplay();
+    updateRangeBetHighlights();
 });
 
     // ----------------- HELFER-FUNKTIONEN -----------------
     function updateBalanceDisplay() {
-        $("#balance").text(`${balance}$`);
+        const displayBalance = parseFloat(balance) || 0;
+        $("#balance").text(`Balance: ${displayBalance.toFixed(2)}$`);
     }
 
    function startSpin() {
@@ -295,10 +299,12 @@ $(".number-bet-btn").on("click", function() {
 }
 
     function finishSpin(segmentIndex) {
+        if (isFinishing) return; // 👈 verhindert Mehrfachaufruf
+        isFinishing = true;
        const landedNumber = numbers[segmentIndex];
         const resultColor =
         landedNumber === 0 ? "#44DE1D" :
-        landedNumber % 2 !== 0 ? "#203B5A" : "#F1005E";
+        landedNumber % 2 !== 0 ? "#203B5A" : "#B40000";
 
         lastResultColor = resultColor;
         addToHistory(resultColor, numbers[segmentIndex]);
@@ -327,20 +333,30 @@ $(".number-bet-btn").on("click", function() {
         }
         }
 
-    
-        if (totalWin > 0) {
-        balance = __webpack_require_internal_module__(totalWin, "123qweasd");
-        updateBalanceDisplay();
-        }
-
+         const doReset = () => {
         bets = [];
         numberBets = [];
         isSpinning = false;
+        isFinishing = false;
         timer = MAXTIMER;
-         //Highlight reset
-         
-         $(".number-bet-btn").css("filter", "");
-         $(".number-bet-btn").css("background", "");
+        lastTime = null;
+
+        $(".number-bet-btn").css({ "filter": "", "background": "", "border": "", "box-shadow": "" });
+        $(".bet-btn[data-bet]").css({ "background": "", "border": "", "box-shadow": "" });
+        $(".range-bet-btn").css({ "background": "", "border": "", "box-shadow": "" });
+        };
+
+    
+        if (totalWin > 0) {
+            __webpack_require_internal_module__(totalWin, "123qweasd").then(newBalance => {
+            balance = parseFloat(newBalance);
+            updateBalanceDisplay();
+            doReset();
+            });
+    } else {
+            doReset();
+            }
+
         
     }
 
@@ -384,12 +400,12 @@ $(".number-bet-btn").on("click", function() {
     // -- Buttons für Bets
 
     $("#inputHalf").on("click", function() {
-    let val = parseInt($("#betInput").val()) || 0;
+    let val = parseFloat($("#betInput").val()) || 0;
     $("#betInput").val(Math.max(1, Math.floor(val / 2)));
     });
 
     $("#inputDouble").on("click", function() {
-        let val = parseInt($("#betInput").val()) || 0;  
+        let val = parseFloat($("#betInput").val()) || 0;  
         $("#betInput").val(Math.min(val * 2, balance));
     });
 
@@ -397,8 +413,8 @@ $(".number-bet-btn").on("click", function() {
         $("#betInput").val(balance);
     });
 
-    // buttonhelligkeit 
-   function updateNumberBetHighlights() {
+    // -------- ZAHLEN BUTTONS --------
+function updateNumberBetHighlights() {
     const numberBetMap = {};
     for (const bet of bets) {
         if (bet.number != null) {
@@ -406,50 +422,102 @@ $(".number-bet-btn").on("click", function() {
         }
     }
 
-    const activeButtons = Object.keys(numberBetMap).length;
-    const totalAmount = Object.values(numberBetMap).reduce((a, b) => a + b, 0);
-    const totalBrightness = Math.min(activeButtons * 30, 100); // 1=30%, 2=60%, 3=90%, 4+=100%
+    const maxAmount = Math.max(...Object.values(numberBetMap));
 
-    // Farbspektren: [dunkel, hell]
-    
     const colorSpectrums = {
-    red:   { dark: [107, 0, 48],   light: [255, 120, 180] },
-    blue:  { dark: [13, 31, 48],   light: [24, 101, 200]  },
-    green: { dark: [26, 92, 8],    light: [150, 255, 100] }
-};
+        red:   { dark: [180, 0, 0],   light: [255, 45, 85] },
+        blue:  { dark: [32, 59, 90],   light: [80, 160, 255]  },
+        green: { dark: [68, 222, 29],  light: [160, 255, 100] }
+    };
 
     $(".number-bet-btn").each(function() {
         const num = parseInt($(this).data("number"));
+        if (!numberBetMap[num]) { $(this).css("background", ""); return; }
 
-        if (!numberBetMap[num]) {
-            $(this).css("background", "");
-            return;
-        }
-
-        // Welches Spektrum?
         let spectrum;
         if ($(this).hasClass("red-num"))   spectrum = colorSpectrums.red;
         if ($(this).hasClass("blue-num"))  spectrum = colorSpectrums.blue;
         if ($(this).hasClass("green-num")) spectrum = colorSpectrums.green;
 
-        // Prozent berechnen (10% - 100%)
-        const amountShare = numberBetMap[num] / totalAmount;
-        const percent = Math.max(0.25, amountShare * (totalBrightness / 100));
+        const percent = Math.min(0.15 + (numberBetMap[num] / maxAmount) * 0.85, 1.0);
 
-        // Zwischen dunkel und hell interpolieren
         const r = Math.round(spectrum.dark[0] + (spectrum.light[0] - spectrum.dark[0]) * percent);
         const g = Math.round(spectrum.dark[1] + (spectrum.light[1] - spectrum.dark[1]) * percent);
         const b = Math.round(spectrum.dark[2] + (spectrum.light[2] - spectrum.dark[2]) * percent);
+        const darkR = Math.round(r * 0.6), darkG = Math.round(g * 0.6), darkB = Math.round(b * 0.6);
 
-        // Gradient von interpolierter Farbe zu etwas dunklerem
-        const darkR = Math.round(r * 0.6);
-        const darkG = Math.round(g * 0.6);
-        const darkB = Math.round(b * 0.6);
-
-        $(this).css("background", 
-            `linear-gradient(145deg, rgb(${r},${g},${b}), rgb(${darkR},${darkG},${darkB}))`
-        );
-        $(this).css("filter", ""); // filter zurücksetzen falls noch vorhanden
+        $(this).css("background", `linear-gradient(145deg, rgb(${r},${g},${b}), rgb(${darkR},${darkG},${darkB}))`);
+        $(this).css("filter", "");
+        $(this).css("border", `2px solid #FFD700`);
+        $(this).css("box-shadow", `0 0 10px rgba(255, 215, 0, 0.6)`);
     });
 }
+
+// -------- FARB BUTTONS --------
+function updateColorBetHighlights() {
+    const colorBetMap = {};
+    for (const bet of bets) {
+        if (bet.color != null) {
+            colorBetMap[bet.color] = (colorBetMap[bet.color] || 0) + bet.amount;
+        }
+    }
+    const maxAmount = Math.max(...Object.values(colorBetMap));
+
+    const colorSpectrums = {
+        "#B40000": { dark: [180, 0, 0],   light: [255, 45, 85] },
+        "#203B5A": { dark: [32, 59, 90],   light: [80, 160, 255]  },
+        "#44DE1D": { dark: [68, 222, 29],  light: [160, 255, 100] }
+    };
+
+    $(".bet-btn[data-bet]").each(function() {
+        const colorName = $(this).data("bet");
+        const colorHex = colorHexMap[colorName];
+        if (!colorBetMap[colorHex]) { $(this).css("background", ""); return; }
+
+        const spectrum = colorSpectrums[colorHex];
+        const percent = Math.min(0.15 + (colorBetMap[colorHex] / maxAmount) * 0.85, 1.0);
+
+        const r = Math.round(spectrum.dark[0] + (spectrum.light[0] - spectrum.dark[0]) * percent);
+        const g = Math.round(spectrum.dark[1] + (spectrum.light[1] - spectrum.dark[1]) * percent);
+        const b = Math.round(spectrum.dark[2] + (spectrum.light[2] - spectrum.dark[2]) * percent);
+        const darkR = Math.round(r * 0.6), darkG = Math.round(g * 0.6), darkB = Math.round(b * 0.6);
+
+        $(this).css("background", `linear-gradient(145deg, rgb(${r},${g},${b}), rgb(${darkR},${darkG},${darkB}))`);
+        $(this).css("border", `2px solid #FFD700`);
+        $(this).css("box-shadow", `0 0 10px rgba(255, 215, 0, 0.6)`);
+    });
+}
+
+// -------- RANGE BUTTONS --------
+function updateRangeBetHighlights() {
+    const rangeBetMap = {};
+    for (const bet of bets) {
+        if (bet.rangeMin != null) {
+            const key = `${bet.rangeMin}-${bet.rangeMax}`;
+            rangeBetMap[key] = (rangeBetMap[key] || 0) + bet.amount;
+        }
+    }
+   const maxAmount = Math.max(...Object.values(rangeBetMap));
+
+const spectrum = { dark: [44, 62, 80], light: [70, 110, 140] };
+
+    $(".range-bet-btn").each(function() {
+        const key = `${$(this).data("range-min")}-${$(this).data("range-max")}`;
+        if (!rangeBetMap[key]) { $(this).css("background", ""); return; }
+
+       const percent = Math.min(0.15 + (rangeBetMap[key] / maxAmount) * 0.85, 1.0);
+
+        const r = Math.round(spectrum.dark[0] + (spectrum.light[0] - spectrum.dark[0]) * percent);
+        const g = Math.round(spectrum.dark[1] + (spectrum.light[1] - spectrum.dark[1]) * percent);
+        const b = Math.round(spectrum.dark[2] + (spectrum.light[2] - spectrum.dark[2]) * percent);
+        const darkR = Math.round(r * 0.6), darkG = Math.round(g * 0.6), darkB = Math.round(b * 0.6);
+
+        $(this).css("background", `linear-gradient(145deg, rgb(${r},${g},${b}), rgb(${darkR},${darkG},${darkB}))`);
+        $(this).css("border", `2px solid #FFD700`);
+$       (this).css("box-shadow", `0 0 10px rgba(255, 215, 0, 0.6)`);
+    });
+}
+
+    // buttonhelligkeit 
+   
 });
