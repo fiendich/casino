@@ -2,17 +2,6 @@
 {% block content %}
 <link rel="stylesheet" href="../static/css/plinko.css">
 <div id="gameArea">
-    <div id="balance">
-    {% if session.get("user_id") -%}
-        ${%- set val = balance|float -%}
-        {%- if val == val|int -%}
-            {{ val|int }}
-        {%- else -%}
-            {{ "%.2f"|format(val) }}
-        {%- endif -%}
-    {%- endif %}
-    </div>
-    
     
     <div id="btnContainer">
         <p>Bet Amount</p>
@@ -24,6 +13,11 @@
             <span id="dollar">$</span>
             <input type="number" placeholder="100" id="bet" min="1" value="100"/>
         </div>
+        <p id="balance">
+            {% if session.get("user_id") %}
+                {{ "%.2f"|format(balance|float) }}$
+            {% endif %}
+        </p>
         <p>Risk Level</p>
             <div class="risk-track">
                 <button class="risk-option active" data-risk="low">LOW</button>

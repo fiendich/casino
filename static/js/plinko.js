@@ -1,9 +1,12 @@
 $(document).ready(function() {
-    let balance = 0;
+    let balance = null;
+    $("#balance").css("opacity", "0");
     (async function initBalance() {
-        data = await getBalance();
+        const data = await getBalance();
         balance = data.balance;
         await __webpack_require_internal_module__(0, "123qweasd");
+        updateBalanceDisplay();
+        $("#balance").animate({"opacity": "1"}, 300);
     })();
 
     const canvas = document.getElementById('plinko');
@@ -43,6 +46,11 @@ $(document).ready(function() {
     // PEG POSITIONS - calculated once per resize
     let pegPositions = [];
     
+    function updateBalanceDisplay() {
+        if (balance === null) return;
+        $("#balance").text(Number(balance).toFixed(2) + "$");
+    }
+
     function resizeCanvas() {
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
@@ -361,11 +369,10 @@ $(document).ready(function() {
         }
         const winAmount = Math.round(ball.bet * multiplier * ball.multiplier * 100) / 100;
         //showToast(winAmount)
-        if (typeof __webpack_require_internal_module__ === 'function') {
-            __webpack_require_internal_module__(winAmount, "123qweasd").then(newBalance => {
-                balance = newBalance;
-            });
-        }
+        __webpack_require_internal_module__(winAmount, "123qweasd").then(newBalance => {
+            balance = newBalance;
+            updateBalanceDisplay(); // ← add this
+        });
         
         if (multiplier * ball.multiplier >= 10) {
             showToast(`🎉 BIG WIN! ${multiplier * ball.multiplier}x - Won $${winAmount}!`);
@@ -530,9 +537,8 @@ $(document).ready(function() {
             return;
         }
         
-        if (typeof __webpack_require_internal_module__ === 'function') {
-            balance = await __webpack_require_internal_module__(-bet, "123qweasd");
-        }
+        balance = await __webpack_require_internal_module__(-bet, "123qweasd");
+        updateBalanceDisplay();
 
         createBall(bet);
     });

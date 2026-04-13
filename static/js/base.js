@@ -99,11 +99,20 @@ function switchTab(tabName) {
     if (tabContent) tabContent.classList.add('active');
 }
 
-// Tab button click handlers
-document.querySelectorAll('.tab-button').forEach(button => {
-    button.addEventListener('click', function() {
-        switchTab(this.dataset.tab);
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab button wiring — must be here, not outside
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', function() {
+            switchTab(this.dataset.tab);
+        });
     });
+
+    // URL param check
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('modal') === 'auth') {
+        const tab = urlParams.get('tab') || 'login';
+        openAuthModal(tab);
+    }
 });
 
 // Close modal when clicking outside
