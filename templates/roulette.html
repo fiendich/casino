@@ -6,33 +6,24 @@
 
     <!-- Left Panel für Bets -->
     <div id="left-panel">
-       <div id="balance">
-       {% if session.get("user_id") -%}
-          ${%- set val = balance|float -%}
-          {%- if val == val|int -%}
-              {{ val|int }}
-          {%- else -%}
-              {{ "%.2f"|format(val) }}
-          {%- endif -%}
-      {%- endif %}
-      </div>
+       
       <div id="inputContainer">
             <button id="inputHalf">1/2</button>
             <button id="inputDouble">2x</button>
             <button id="inputMax">Max</button>
             
             <span id="dollar">$</span>
-            <input type="number" placeholder="100" id="betInput" min="1" value="100"/>
+            <input type="number" placeholder="100" id="betInput" min="0.01" step="0.01" value="100"/>
         </div>
 
-    <p>Set color (click to bet):</p>
+    <h3>Bet on a color:</h3>
     <div id="colorBetPanel">
     <button class="bet-btn" data-bet="red">red x2</button>
     <button class="bet-btn" data-bet="blue">blue x2</button>
     <button class="bet-btn" data-bet="green">green x20</button>
     </div>
 
- <h3>Setze auf Zahl</h3>
+ <h3>Bet on a number:</h3>
    <div id="numberBetPanel">
     <button class="number-bet-btn green-num" data-number="0">0</button>
     <button class="number-bet-btn blue-num"  data-number="1">1</button>
@@ -57,17 +48,27 @@
     <button class="number-bet-btn red-num"   data-number="20">20</button>
 </div>
 
-    <p>Set range (3x payout):</p>
+    <h3>Bet on range (3x payout):</h3>
         <div id="rangeBetPanel">
             <button class="bet-btn range-bet-btn" data-range-min="0" data-range-max="6">0–6 x3</button>
             <button class="bet-btn range-bet-btn" data-range-min="7" data-range-max="13">7–13 x3</button>
             <button class="bet-btn range-bet-btn" data-range-min="14" data-range-max="20">14–20 x3</button>
         </div>
+        <div id="balance">
+       {% if session.get("user_id") -%}
+          ${%- set val = balance|float -%}
+          {%- if val == val|int -%}
+              {{ val|int }}
+          {%- else -%}
+              {{ "%.2f"|format(val) }}
+          {%- endif -%}
+      {%- endif %}
+      </div>
     </div>    
 
     <!-- Canvas Wheel + History Bar-->
     <div id="historyBar" style="display: flex; text-align: center; gap:4px; margin-bottom:10px;"></div> 
-    <canvas id="myWheel" width="1000" height="650">
+    <canvas id="myWheel" width="800" height="650">
         Sorry, your browser does not support canvas.
     </canvas>
 
