@@ -19,3 +19,6 @@ instance/
 
 # OS files
 .DS_Store
+
+# Backups
+*.bak

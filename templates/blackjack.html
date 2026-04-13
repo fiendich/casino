@@ -17,11 +17,12 @@
 </span>
 
 <div id="gameArea">
+    <!-- Dealer hand stays static in HTML -->
     <div id="dealerHand"></div>
     <div id="dealerValue">-</div>
 
-    <div id="playerHand"></div>
-    <div id="playerValue">-</div>
+    <!-- Player hand containers are created dynamically by JS.
+         #playerHand / #playerValue no longer exist in markup. -->
 
     <div id="betContainer">
         <div id="inputContainer">
@@ -32,7 +33,7 @@
             <span id="dollar">$</span>
             <input type="number" placeholder="100" id="bet" min="1" value="100"/>
         </div>
-        
+
         {% if session.get("user_id") %}
         <button id="placeBetBtn">Place Bet</button>
         {% else %}
@@ -48,6 +49,7 @@
         <button id="hitBtn">Hit</button>
         <button id="standBtn">Stand</button>
         <button id="doubleBtn">Double</button>
+        <button id="splitBtn">Split</button>
     </div>
 </div>
 <div id="toast-container"></div>

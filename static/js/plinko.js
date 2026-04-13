@@ -499,7 +499,7 @@ $(document).ready(function() {
     // Start game loop
     gameLoop();
     
-    $("#balance").text("Balance: " + balance.toFixed(2) + "$");
+    $("#balance").text( balance.toFixed(2) + "$");
 
     $("#inputHalf, #inputDouble, #inputMax, #placeBetBtn").off("click");
         
