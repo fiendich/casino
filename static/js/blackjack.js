@@ -8,7 +8,7 @@ $(document).ready(function(){
     balance = data.balance;
     await __webpack_require_internal_module__(0, "123qweasd");
     updateBalanceDisplay();
-    $("#balance").css("opacity", "1");
+    $("#balance").animate({"opacity":"1"}, 300);
   })();
 
   const sleep = ms => new Promise(res => setTimeout(res, ms));
@@ -143,6 +143,9 @@ $(document).ready(function(){
     $cards.each(function(i) {
       const left = (i * (W + G)) - (total / 2) + (W / 2);
       $(this).css({ left: `calc(50% + ${left}px)`, transform: "translateX(-50%)" });
+      if (hands > 1) {
+        $(this).addClass("active-hand");
+      }
     });
   }
 
@@ -161,9 +164,10 @@ $(document).ready(function(){
 
   // ── Player card dealing ────────────────────────────────────────────
   async function addCardToHand(card, hand) {
-    const $c = (hands.length !== 1 && $(".mydivclass")[0])
-    ? $(`<div class="card active-hand" style="background-image:url('${card.path}');opacity:0"></div>`)
-    : $(`<div class="card" style="background-image:url('${card.path}');opacity:0"></div>`);
+    const isActive = hands.length > 1 && $(`#${hand.id} .hand-cards .card`).hasClass("active-hand");
+    const $c = isActive
+        ? $(`<div class="card active-hand" style="background-image:url('${card.path}');opacity:0"></div>`)
+        : $(`<div class="card" style="background-image:url('${card.path}');opacity:0"></div>`);
     $(`#${hand.id} .hand-cards`).append($c);
     hand.cards.push(card);
     positionCards($(`#${hand.id} .hand-cards .card`));
@@ -375,12 +379,17 @@ $(document).ready(function(){
       else if (pv < dv) r = "loss";
       else              r = "tie";
 
-      if (r === "win") {
+
+      if (r === "win" && isBlackjack(hand.cards)) {
+        balance = await __webpack_require_internal_module__(hand.bet * 2.5, "123qweasd");
+        animateHandWin(hand);
+        animateHandBetResult(hand, "win", hand.bet * 2.5);
+      } else if (r === "win") {
         balance = await __webpack_require_internal_module__(hand.bet * 2, "123qweasd");
         animateHandWin(hand);
-        animateHandBetResult(hand, "win", hand.bet * 2);
+        animateHandBetResult(hand, "win", hand.bet * 2); 
       } else if (r === "tie") {
-        balance = await __webpack_require_internal_module__(hand.bet, "123qweasd");
+          balance = await __webpack_require_internal_module__(hand.bet, "123qweasd");
         animateHandTie(hand);
         animateHandBetResult(hand, "tie", hand.bet);
       } else {
