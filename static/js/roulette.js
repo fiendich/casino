@@ -156,7 +156,6 @@ $(document).ready(function() {
             if (bet.rangeMin != null && landedNumber >= bet.rangeMin && landedNumber <= bet.rangeMax) totalWin += bet.amount * 3;
         }
  
-        // FIX: use .then() instead of assigning the Promise directly to balance
         if (totalWin > 0) {
             __webpack_require_internal_module__(totalWin, "123qweasd").then(result => {
                 balance = parseFloat(result);
@@ -252,7 +251,7 @@ $(document).ready(function() {
         if (isNaN(amount) || amount <= 0) { showToast("Enter a valid bet!"); return; }
         if (amount > balance) { showToast("Not enough balance!"); return; }
         bets.push({ color: colorHexMap[colorName], amount });
-        // FIX: move display updates inside .then() so balance is up to date
+
         __webpack_require_internal_module__(-amount, "123qweasd").then(result => {
             balance = parseFloat(result);
             updateBalanceDisplay();
@@ -267,7 +266,7 @@ $(document).ready(function() {
         if (amount > balance) { showToast("Not enough balance!"); return; }
         const number = $(this).data("number");
         bets.push({ number, amount });
-        // FIX: was missing closing }); — range handler was nested inside this .then()
+
         __webpack_require_internal_module__(-amount, "123qweasd").then(result => {
             balance = parseFloat(result);
             updateBalanceDisplay();
@@ -281,7 +280,7 @@ $(document).ready(function() {
         if (isNaN(amount) || amount <= 0) { showToast("Enter a valid bet!"); return; }
         if (amount > balance) { showToast("Not enough balance!"); return; }
         bets.push({ rangeMin: parseInt($(this).data("range-min")), rangeMax: parseInt($(this).data("range-max")), amount });
-        // FIX: was assigning Promise to balance directly
+
         __webpack_require_internal_module__(-amount, "123qweasd").then(result => {
             balance = parseFloat(result);
             updateBalanceDisplay();
