@@ -1,84 +1,68 @@
 {% extends "base.html" %}
 {% block content %}
 <div id="gameArea">
-
     <div class="bg"></div>
-
-    <!-- Left Panel für Bets -->
+<div id="gameWrapper">
     <div id="left-panel">
-       
       <div id="inputContainer">
-            <button id="inputHalf">1/2</button>
-            <button id="inputDouble">2x</button>
-            <button id="inputMax">Max</button>
-            
+            <button id="inputHalf" {% if not session.get("user_id") %}disabled{% endif %}>1/2</button>
+            <button id="inputDouble" {% if not session.get("user_id") %}disabled{% endif %}>2x</button>
+            <button id="inputMax" {% if not session.get("user_id") %}disabled{% endif %}>Max</button>
             <span id="dollar">$</span>
-            <input type="number" placeholder="100" id="betInput" min="0.01" step="0.01" value="100"/>
+            <input type="number" placeholder="100" id="betInput" min="0.01" step="0.01" value="100" {% if not session.get("user_id") %}disabled{% endif %}/>
         </div>
-
     <h3>Bet on a color:</h3>
     <div id="colorBetPanel">
-    <button class="bet-btn" data-bet="red">red x2</button>
-    <button class="bet-btn" data-bet="blue">blue x2</button>
-    <button class="bet-btn" data-bet="green">green x20</button>
+        <button class="bet-btn" data-bet="red" {% if not session.get("user_id") %}disabled{% endif %}>red x2</button>
+        <button class="bet-btn" data-bet="blue" {% if not session.get("user_id") %}disabled{% endif %}>blue x2</button>
+        <button class="bet-btn" data-bet="green" {% if not session.get("user_id") %}disabled{% endif %}>green x20</button>
     </div>
-
- <h3>Bet on a number:</h3>
-   <div id="numberBetPanel">
-    <button class="number-bet-btn green-num" data-number="0">0</button>
-    <button class="number-bet-btn blue-num"  data-number="1">1</button>
-    <button class="number-bet-btn red-num"   data-number="2">2</button>
-    <button class="number-bet-btn blue-num"  data-number="3">3</button>
-    <button class="number-bet-btn red-num"   data-number="4">4</button>
-    <button class="number-bet-btn blue-num"  data-number="5">5</button>
-    <button class="number-bet-btn red-num"   data-number="6">6</button>
-    <button class="number-bet-btn blue-num"  data-number="7">7</button>
-    <button class="number-bet-btn red-num"   data-number="8">8</button>
-    <button class="number-bet-btn blue-num"  data-number="9">9</button>
-    <button class="number-bet-btn red-num"   data-number="10">10</button>
-    <button class="number-bet-btn blue-num"  data-number="11">11</button>
-    <button class="number-bet-btn red-num"   data-number="12">12</button>
-    <button class="number-bet-btn blue-num"  data-number="13">13</button>
-    <button class="number-bet-btn red-num"   data-number="14">14</button>
-    <button class="number-bet-btn blue-num"  data-number="15">15</button>
-    <button class="number-bet-btn red-num"   data-number="16">16</button>
-    <button class="number-bet-btn blue-num"  data-number="17">17</button>
-    <button class="number-bet-btn red-num"   data-number="18">18</button>
-    <button class="number-bet-btn blue-num"  data-number="19">19</button>
-    <button class="number-bet-btn red-num"   data-number="20">20</button>
-</div>
-
+    <h3>Bet on a number:</h3>
+    <div id="numberBetPanel">
+        <button class="number-bet-btn green-num" data-number="0" {% if not session.get("user_id") %}disabled{% endif %}>0</button>
+        <button class="number-bet-btn blue-num"  data-number="1" {% if not session.get("user_id") %}disabled{% endif %}>1</button>
+        <button class="number-bet-btn red-num"   data-number="2" {% if not session.get("user_id") %}disabled{% endif %}>2</button>
+        <button class="number-bet-btn blue-num"  data-number="3" {% if not session.get("user_id") %}disabled{% endif %}>3</button>
+        <button class="number-bet-btn red-num"   data-number="4" {% if not session.get("user_id") %}disabled{% endif %}>4</button>
+        <button class="number-bet-btn blue-num"  data-number="5" {% if not session.get("user_id") %}disabled{% endif %}>5</button>
+        <button class="number-bet-btn red-num"   data-number="6" {% if not session.get("user_id") %}disabled{% endif %}>6</button>
+        <button class="number-bet-btn blue-num"  data-number="7" {% if not session.get("user_id") %}disabled{% endif %}>7</button>
+        <button class="number-bet-btn red-num"   data-number="8" {% if not session.get("user_id") %}disabled{% endif %}>8</button>
+        <button class="number-bet-btn blue-num"  data-number="9" {% if not session.get("user_id") %}disabled{% endif %}>9</button>
+        <button class="number-bet-btn red-num"   data-number="10" {% if not session.get("user_id") %}disabled{% endif %}>10</button>
+        <button class="number-bet-btn blue-num"  data-number="11" {% if not session.get("user_id") %}disabled{% endif %}>11</button>
+        <button class="number-bet-btn red-num"   data-number="12" {% if not session.get("user_id") %}disabled{% endif %}>12</button>
+        <button class="number-bet-btn blue-num"  data-number="13" {% if not session.get("user_id") %}disabled{% endif %}>13</button>
+        <button class="number-bet-btn red-num"   data-number="14" {% if not session.get("user_id") %}disabled{% endif %}>14</button>
+        <button class="number-bet-btn blue-num"  data-number="15" {% if not session.get("user_id") %}disabled{% endif %}>15</button>
+        <button class="number-bet-btn red-num"   data-number="16" {% if not session.get("user_id") %}disabled{% endif %}>16</button>
+        <button class="number-bet-btn blue-num"  data-number="17" {% if not session.get("user_id") %}disabled{% endif %}>17</button>
+        <button class="number-bet-btn red-num"   data-number="18" {% if not session.get("user_id") %}disabled{% endif %}>18</button>
+        <button class="number-bet-btn blue-num"  data-number="19" {% if not session.get("user_id") %}disabled{% endif %}>19</button>
+        <button class="number-bet-btn red-num"   data-number="20" {% if not session.get("user_id") %}disabled{% endif %}>20</button>
+    </div>
     <h3>Bet on range (3x payout):</h3>
         <div id="rangeBetPanel">
-            <button class="bet-btn range-bet-btn" data-range-min="0" data-range-max="6">0–6 x3</button>
-            <button class="bet-btn range-bet-btn" data-range-min="7" data-range-max="13">7–13 x3</button>
-            <button class="bet-btn range-bet-btn" data-range-min="14" data-range-max="20">14–20 x3</button>
+            <button class="bet-btn range-bet-btn" data-range-min="0" data-range-max="6" {% if not session.get("user_id") %}disabled{% endif %}>0–6 x3</button>
+            <button class="bet-btn range-bet-btn" data-range-min="7" data-range-max="13" {% if not session.get("user_id") %}disabled{% endif %}>7–13 x3</button>
+            <button class="bet-btn range-bet-btn" data-range-min="14" data-range-max="20" {% if not session.get("user_id") %}disabled{% endif %}>14–20 x3</button>
         </div>
         <div id="balance">
-       {% if session.get("user_id") -%}
-          ${%- set val = balance|float -%}
-          {%- if val == val|int -%}
-              {{ val|int }}
-          {%- else -%}
-              {{ "%.2f"|format(val) }}
-          {%- endif -%}
-      {%- endif %}
-      </div>
-    </div>    
-
-    <!-- Canvas Wheel + History Bar-->
-    <div id="historyBar" style="display: flex; text-align: center; gap:4px; margin-bottom:10px;"></div> 
-    <canvas id="myWheel" width="800" height="650">
-        Sorry, your browser does not support canvas.
-    </canvas>
-
+        {% if session.get("user_id") -%}
+            {%- set val = balance|float -%}
+            {%- if val == val|int -%}{{ val|int }}{%- else -%}{{ "%.2f"|format(val) }}{%- endif -%}
+        {%- endif %}
+        </div>
+    </div>
+    <div id="canvasWrapper">
+        <div id="historyBar"></div>
+        <canvas id="myWheel" width="800" height="650">
+            Sorry, your browser does not support canvas.
+        </canvas>
+    </div>
 </div>
-
-
-
-
+</div>
 <link rel="stylesheet" href="../static/css/roulette.css">
 <script src="/static/js/api.js"></script>
 <script src="/static/js/roulette.js" defer></script>
-
 {% endblock %}

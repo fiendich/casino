@@ -11,8 +11,11 @@
     background-position: center;
 }
 
+
+
 /* Balance*/
 #balance {
+    opacity: 0  ;
     font-size: 20px;
     color: #7a8ab5;
     margin: 0;
@@ -32,11 +35,11 @@
 
 /* Left Panel */
 #left-panel {
-    position: fixed;
-    top: 135px;
-    left: 50px;
+    position: relative;
+    top: auto;
+    left: auto;
     width: 25vw;
-    height: calc(100vh - 124px);
+    height: 100%;
     background-color: rgba(11, 28, 61, 0.3);
     padding: 20px;
     box-sizing: border-box;
@@ -44,8 +47,28 @@
     display: flex;
     border-radius: 3%;
     flex-direction: column;
-    gap: 12px;
+    gap: 4px;
     align-items: center;
+    justify-content: center; /* 👈 gleichmäßig verteilt */
+    flex-shrink: 0;
+}
+
+#left-panel h3 {
+    margin: 40px 0 12.5px 0;  /* oben 0, unten nur 2px */
+    font-size: 14px;
+    color: #a0b0d0;
+}
+
+#gameWrapper {
+    position: fixed;
+    top: 135px;
+    left: 50px;
+    right: 50px;
+    bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: stretch;
 }
 
 #colorBetPanel {
@@ -104,23 +127,23 @@ button {
 
 /* Jeder Button bekommt eine eigene Farbe im Spektrum */
 .range-bet-btn {
-    background: linear-gradient(145deg, #2C3E50, #1a252f);
-    border: 1px solid #2C3E50;
-    box-shadow: 0 0 8px rgba(44, 62, 80, 0.3);
+    background: linear-gradient(145deg, #203B5A, #0d1f30);
+    border: 1px solid #203B5A;
+    box-shadow: 0 0 8px rgba(32, 59, 90, 0.3);
 }
 
-/* Spin Container unter Canvas */
-#spinContainer {
-    position: absolute;
-    top: calc(50% + 260px);
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 3;
-
+#canvasWrapper {
+    position: relative;
+    flex: 1;
+    background-color: rgba(11, 28, 61, 0.3);
+    border-radius: 3%;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
+
+
 
 /* Canvas */
 canvas {
@@ -130,16 +153,10 @@ canvas {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-     background-color: rgba(11, 28, 61, 0.3);  /* war #0B1C3D, jetzt 60% opak */
     background-size: cover;
     background-position: center;
 }
 
-/* Disabled Spin-Button */
-#spinBtn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
 
 .number-bet-btn.red-num {
     background: linear-gradient(145deg, #B40000, #6B0000);
@@ -163,30 +180,15 @@ canvas {
 }
 /* History Bar über dem Canvas */
 #historyBar {
-    display: inline-flex;
-    justify-content: center;
-    gap: 6px;
-    margin-bottom: 10px;
     position: absolute;
-    top: 50px;
-    left: 60.1379%;
+    top: 15px;
+    left: 50%;
     transform: translateX(-50%);
     z-index: 5;
+    display: inline-flex;
+    gap: 6px;
 }
 
-
-/* einzelne History-Farben */
-#historyBar .history-color {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 1px solid #333;
-}
-
-#myWheel {
-    position: relative; /* oder absolute, je nach Layout */
-    left: 60%/* Verschiebung nach rechts */
-}
 
 #numberBetPanel {
     display: grid;
@@ -210,7 +212,7 @@ canvas {
     display: flex;
     width: 90%;
     height: 45px;
-    margin-top: 30px;
+    margin-top: 0;
 }
 
 #inputContainer input {
