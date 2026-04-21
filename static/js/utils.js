@@ -1,5 +1,6 @@
 function showToast(message, type = "info", duration = 2500) {
     const toast = $(`<div class="toast ${type}">${message}</div>`);
+    if ($("#toast-container .toast").length > 4) {return}
 
     $("#toast-container").append(toast);
 
