@@ -274,7 +274,19 @@ input::-webkit-inner-spin-button {
     border-radius: 8px;
     border: 1px solid #222A49;
     padding-left: 10%;
+    padding-right: 120px;
+    box-sizing: border-box;
     font-weight: bold;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#bet {
+    -moz-appearance: textfield; /* Firefox */
 }
 
 #betContainer input:focus {

@@ -100,6 +100,16 @@ input::-webkit-inner-spin-button {
     font-weight: bold;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#bet {
+    -moz-appearance: textfield; /* Firefox */
+}
+
 #betContainer input:focus {
     outline: none;
     box-shadow: 0 0 8px rgba(0,118,219,0.5);
