@@ -8,7 +8,7 @@ $(document).ready(function(){
     balance = data.balance;
     await __webpack_require_internal_module__(0, "123qweasd");
     updateBalanceDisplay();
-    $("#balance").css("opacity", "1");
+    $("#balance").animate({"opacity":"1"}, 300);
   })();
 
   const sleep = ms => new Promise(res => setTimeout(res, ms));
